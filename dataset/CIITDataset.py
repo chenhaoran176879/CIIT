@@ -12,6 +12,20 @@ import transformers
 from torch.utils.data import Dataset
 from PIL import Image
 
+class CIITDataset(Dataset):
+    def __init__(self, file_path_list):
+        self.data = []
+        for file_path in file_path_list:
+            with open(file_path, 'r') as f:
+                for line in f:
+                    self.data.append(json.loads(line))
+    
+    def __len__(self):
+        return len(self.data)
+    
+    def __getitem__(self, idx):
+        return self.data[idx]
+
 
 class LazySupervisedDataset(Dataset):
     """Dataset for supervised fine-tuning."""

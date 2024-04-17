@@ -47,7 +47,7 @@ def get_interleave_form(text):
 
     return result
 
-def get_interleave_distribution():
+def get_interleave_distribution(dataset):
     lens_dict = defaultdict(int)
     for i in range(len(dataset)):
         lens_dict[len(get_interleave_form(dataset[i]['content']))]+=1
@@ -79,10 +79,18 @@ def plot_interleave_distribution(data_dict,select_minimal_rate = 0.3):
     plt.savefig(f"/mnt/lustre/chenhaoran/CIIT/dataset/interleave_summary_{select_minimal_rate}.jpg")
 
 
-if __name__ == '__main__':
-    #dataset = CIITDataset([baidu_file,toutiao_file])
+def get_start_modality_distribution(dataset):
+    start_modality_dict = defaultdict(int)
+
+    pass
+
+def scripts_save():
     with open("/mnt/lustre/chenhaoran/CIIT/dataset/interleave_summary.json",'r',encoding='utf-8') as f:
         lens_dict = json.load(f)
 
     for rate in range(1,11,1):
         plot_interleave_distribution(lens_dict,select_minimal_rate=float(rate)/10)
+
+if __name__ == '__main__':
+    dataset = CIITDataset([baidu_file,toutiao_file])
+    print(len(dataset))
