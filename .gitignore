@@ -179,7 +179,8 @@ configs/deprecated/
 sh*/
 temp*/
 *ipynb
-
+*.log
+slurm-*out
 *.pt
 *_script.py
 

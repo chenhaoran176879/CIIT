@@ -44,7 +44,7 @@ class StableDiffusion(nn.Module):
         self.vae_encode_mini_bs = vae_encode_mini_bs
         self.base_seed = base_seed
         self.use_random_seed = use_random_seed
-
+        print(os.listdir(pretrained_model_name_or_path))
         self.noise_scheduler: DDPMScheduler = DDPMScheduler.from_pretrained(
             pretrained_model_name_or_path, subfolder="scheduler"
         )

@@ -1,0 +1,330 @@
+slurm_job_node_list: dx-ai-node8
+slurm_ntasks_per_node: 1
+master_addr: dx-ai-node8
+master_port: 18466
+node_num: 1
+gpu_per_node: 1
+node_rank: 0
+local_rank: 0
+[2024-04-18 20:58:18,757] [INFO] [real_accelerator.py:133:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+Discovered fixed LlamaRotaryEmbedding - will use it instead of original LlamaRotaryEmbedding
+replace GenerationMixin.beam_search with _custom_beam_search
+replace Blip2QFormerMultiHeadAttention to support qk_norm
+replace UNet2DConditionModel.forward with _custom_forward
+replace StableDiffusionPipeline.__call__ with __custom_call__
+[20:58:24.352105] Rank 0 | Local Rank 0 | World Size 1 | Local World Size 1 |
+[20:58:24.390727] TrainingArguments(
+_n_gpu=1,
+adafactor=False,
+adam_beta1=0.9,
+adam_beta2=0.999,
+adam_epsilon=1e-08,
+auto_find_batch_size=False,
+bf16=False,
+bf16_full_eval=False,
+config_file=./mm_interleaved/configs/release/mm_inference.yaml,
+data_seed=None,
+dataloader_drop_last=False,
+dataloader_num_workers=0,
+dataloader_pin_memory=True,
+ddp_backend=None,
+ddp_broadcast_buffers=None,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=[],
+deepspeed=None,
+disable_tqdm=False,
+do_eval=False,
+do_predict=False,
+do_train=False,
+eval_accumulation_steps=None,
+eval_delay=0,
+eval_steps=None,
+evaluation_strategy=no,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+fsdp=[],
+fsdp_config={'fsdp_min_num_params': 0, 'xla': False, 'xla_fsdp_grad_ckpt': False},
+fsdp_min_num_params=0,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+generate_mode=generate_texts,
+gradient_accumulation_steps=1,
+gradient_checkpointing=False,
+greater_is_better=None,
+group_by_length=False,
+half_precision_backend=auto,
+hub_model_id=None,
+hub_private_repo=False,
+hub_strategy=every_save,
+hub_token=<HUB_TOKEN>,
+ignore_data_skip=False,
+include_inputs_for_metrics=False,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+learning_rate=5e-05,
+length_column_name=length,
+load_best_model_at_end=False,
+local_rank=0,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=./OUTPUT/mm_inference/runs/Apr18_20-58-24_dx-ai-node8,
+logging_first_step=False,
+logging_nan_inf_filter=True,
+logging_steps=500,
+logging_strategy=steps,
+lr_for_random_params=0.001,
+lr_for_random_params_list=None,
+lr_scheduler_type=linear,
+max_grad_norm=1.0,
+max_steps=-1,
+metric_for_best_model=None,
+mp_parameters=,
+no_cuda=False,
+num_train_epochs=3.0,
+optim=adamw_hf,
+optim_args=None,
+output_dir=./OUTPUT/mm_inference,
+overwrite_output_dir=False,
+past_index=-1,
+per_device_eval_batch_size=8,
+per_device_train_batch_size=8,
+prediction_loss_only=False,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+random_params=None,
+random_params_list=None,
+ray_scope=last,
+remove_unused_columns=False,
+report_to=[],
+resume=True,
+resume_from_checkpoint=None,
+run_name=./OUTPUT/mm_inference,
+save_on_each_node=False,
+save_safetensors=False,
+save_steps=500,
+save_strategy=steps,
+save_total_limit=None,
+seed=42,
+sharded_ddp=[],
+skip_memory_metrics=True,
+tf32=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torchdynamo=None,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+use_1st_sentence_only=False,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_mps_device=False,
+warmup_ratio=0.0,
+warmup_steps=0,
+wd_for_random_params_list=None,
+weight_decay=0.0,
+xpu_backend=None,
+)
+[20:58:24.391083] Namespace(load_from='./OUTPUT/mm_interleaved_pretrain', annt_path='./docs/examples/annt.json', model={'llm_model_path': './assets/lmsys/vicuna-13b-v1.3', 'num_img_token': 64, 'visual_tokenizer_config': {'encoder_model_path': './assets/openai/clip-vit-large-patch14', 'perceiver_config': {'num_queries': 64, 'hidden_size': 768, 'encoder_hidden_size': 1024, 'cross_attention_frequency': 2, 'num_hidden_layers': 12, 'num_attention_heads': 12, 'qk_normalization': True}}, 'image_decoder_config': {'pretrained_model_name_or_path': './assets/stabilityai/stable-diffusion-2-1-base', 'sd_base_seed': 42, 'perceiver_config': {'num_queries': 77, 'hidden_size': 1024, 'encoder_hidden_size': 5120, 'cross_attention_frequency': 1, 'num_hidden_layers': 1, 'num_attention_heads': 16, 'hidden_dropout_prob': 0.0, 'attention_probs_dropout_prob': 0.0}}}, inference={'tokenizer_path': './assets/lmsys/vicuna-13b-v1.3', 'num_img_token': 64, 'generate_mode': 'generate_texts', 'force_gen_image_next': False, 'force_replace_gen_text': False, 'auto_end': False, 'num_iter': 2, 'transform': {'aug_type': 'numpy', 'resolution': 224}, 'generation_kwargs': {'max_length': 90, 'min_length': 8, 'num_beams': 1, 'use_nucleus_sampling': True, 'repetition_penalty': 1.3, 'guidance_scale': 7.5, 'num_inference_steps': 30, 'num_validation_images': 1}})
+[20:58:24.391120] Model Init Start
+[20:58:31.951881] convert clip visual self_attn to memory efficient mode successfully
+[20:58:31.951933] Freeze clip_vit_adapter_hf is False
+[20:58:31.953536] Freeze vit of clip_vit_adapter_hf is True
+[20:58:31.983407] init Blip2QFormerMultiHeadAttention with qk_norm
+[20:58:31.996846] init Blip2QFormerMultiHeadAttention with qk_norm
+[20:58:32.034160] init Blip2QFormerMultiHeadAttention with qk_norm
+[20:58:32.072115] init Blip2QFormerMultiHeadAttention with qk_norm
+[20:58:32.088287] init Blip2QFormerMultiHeadAttention with qk_norm
+[20:58:32.126886] init Blip2QFormerMultiHeadAttention with qk_norm
+[20:58:32.166379] init Blip2QFormerMultiHeadAttention with qk_norm
+[20:58:32.182120] init Blip2QFormerMultiHeadAttention with qk_norm
+[20:58:32.220827] init Blip2QFormerMultiHeadAttention with qk_norm
+[20:58:32.259550] init Blip2QFormerMultiHeadAttention with qk_norm
+[20:58:32.275325] init Blip2QFormerMultiHeadAttention with qk_norm
+[20:58:32.315107] init Blip2QFormerMultiHeadAttention with qk_norm
+[20:58:32.353346] init Blip2QFormerMultiHeadAttention with qk_norm
+[20:58:32.369336] init Blip2QFormerMultiHeadAttention with qk_norm
+[20:58:32.408175] init Blip2QFormerMultiHeadAttention with qk_norm
+[20:58:32.447398] init Blip2QFormerMultiHeadAttention with qk_norm
+[20:58:32.463676] init Blip2QFormerMultiHeadAttention with qk_norm
+[20:58:32.502771] init Blip2QFormerMultiHeadAttention with qk_norm
+[20:58:34.493171] MMFS spatial_shapes=[32, 16, 8] base_spatial_shape=16 self.scale_ratios=tensor([2.0000, 1.0000, 0.5000])
+[20:58:34.729203] spatial_shapes: [(32, 32), (16, 16), (8, 8)]
+[20:58:41.284562] MMFS spatial_shapes=[32, 16, 8] base_spatial_shape=16 self.scale_ratios=tensor([2.0000, 1.0000, 0.5000])
+[20:58:41.535139] spatial_shapes: [(32, 32), (16, 16), (8, 8)]
+[20:58:48.049474] MMFS spatial_shapes=[32, 16, 8] base_spatial_shape=16 self.scale_ratios=tensor([2.0000, 1.0000, 0.5000])
+[20:58:48.267594] spatial_shapes: [(32, 32), (16, 16), (8, 8)]
+[20:58:54.741128] MMFS spatial_shapes=[32, 16, 8] base_spatial_shape=16 self.scale_ratios=tensor([2.0000, 1.0000, 0.5000])
+[20:58:54.960977] spatial_shapes: [(32, 32), (16, 16), (8, 8)]
+[20:59:01.412573] MMFS spatial_shapes=[32, 16, 8] base_spatial_shape=16 self.scale_ratios=tensor([2.0000, 1.0000, 0.5000])
+[20:59:01.631944] spatial_shapes: [(32, 32), (16, 16), (8, 8)]
+[20:59:08.088055] MMFS spatial_shapes=[32, 16, 8] base_spatial_shape=16 self.scale_ratios=tensor([2.0000, 1.0000, 0.5000])
+[20:59:08.306334] spatial_shapes: [(32, 32), (16, 16), (8, 8)]
+[20:59:14.763777] MMFS spatial_shapes=[32, 16, 8] base_spatial_shape=16 self.scale_ratios=tensor([2.0000, 1.0000, 0.5000])
+[20:59:14.984800] spatial_shapes: [(32, 32), (16, 16), (8, 8)]
+[20:59:21.452740] MMFS spatial_shapes=[32, 16, 8] base_spatial_shape=16 self.scale_ratios=tensor([2.0000, 1.0000, 0.5000])
+[20:59:21.671761] spatial_shapes: [(32, 32), (16, 16), (8, 8)]
+[20:59:28.101433] MMFS spatial_shapes=[32, 16, 8] base_spatial_shape=16 self.scale_ratios=tensor([2.0000, 1.0000, 0.5000])
+[20:59:28.321187] spatial_shapes: [(32, 32), (16, 16), (8, 8)]
+[20:59:34.753275] MMFS spatial_shapes=[32, 16, 8] base_spatial_shape=16 self.scale_ratios=tensor([2.0000, 1.0000, 0.5000])
+[20:59:34.972184] spatial_shapes: [(32, 32), (16, 16), (8, 8)]
+[21:00:34.839572] set model.layers.0.llama_cross_attn.gate requires_grad to True
+[21:00:34.839618] set model.layers.0.llama_cross_attn.attn.ignore_token requires_grad to True
+[21:00:34.839629] set model.layers.0.llama_cross_attn.attn.sampling_offsets.weight requires_grad to True
+[21:00:34.839637] set model.layers.0.llama_cross_attn.attn.sampling_offsets.bias requires_grad to True
+[21:00:34.839646] set model.layers.0.llama_cross_attn.attn.dynamic_offset_mask.weight requires_grad to True
+[21:00:34.839654] set model.layers.0.llama_cross_attn.attn.dynamic_offset_mask.bias requires_grad to True
+[21:00:34.839662] set model.layers.0.llama_cross_attn.attn.attention_weights.weight requires_grad to True
+[21:00:34.839670] set model.layers.0.llama_cross_attn.attn.attention_weights.bias requires_grad to True
+[21:00:34.839678] set model.layers.0.llama_cross_attn.attn.value_proj.weight requires_grad to True
+[21:00:34.839685] set model.layers.0.llama_cross_attn.attn.value_proj.bias requires_grad to True
+[21:00:34.839693] set model.layers.0.llama_cross_attn.attn.output_proj.weight requires_grad to True
+[21:00:34.839700] set model.layers.0.llama_cross_attn.attn.output_proj.bias requires_grad to True
+[21:00:34.839710] set model.layers.0.llama_cross_attn.attn.query_relpos.weight requires_grad to True
+[21:00:34.839719] set model.layers.0.llama_cross_attn.norm1.weight requires_grad to True
+[21:00:34.839728] set model.layers.0.llama_cross_attn.norm2.weight requires_grad to True
+[21:00:34.839817] set model.layers.4.llama_cross_attn.gate requires_grad to True
+[21:00:34.839828] set model.layers.4.llama_cross_attn.attn.ignore_token requires_grad to True
+[21:00:34.839837] set model.layers.4.llama_cross_attn.attn.sampling_offsets.weight requires_grad to True
+[21:00:34.839845] set model.layers.4.llama_cross_attn.attn.sampling_offsets.bias requires_grad to True
+[21:00:34.839853] set model.layers.4.llama_cross_attn.attn.dynamic_offset_mask.weight requires_grad to True
+[21:00:34.839861] set model.layers.4.llama_cross_attn.attn.dynamic_offset_mask.bias requires_grad to True
+[21:00:34.839869] set model.layers.4.llama_cross_attn.attn.attention_weights.weight requires_grad to True
+[21:00:34.839876] set model.layers.4.llama_cross_attn.attn.attention_weights.bias requires_grad to True
+[21:00:34.839885] set model.layers.4.llama_cross_attn.attn.value_proj.weight requires_grad to True
+[21:00:34.839892] set model.layers.4.llama_cross_attn.attn.value_proj.bias requires_grad to True
+[21:00:34.839900] set model.layers.4.llama_cross_attn.attn.output_proj.weight requires_grad to True
+[21:00:34.839907] set model.layers.4.llama_cross_attn.attn.output_proj.bias requires_grad to True
+[21:00:34.839916] set model.layers.4.llama_cross_attn.attn.query_relpos.weight requires_grad to True
+[21:00:34.839925] set model.layers.4.llama_cross_attn.norm1.weight requires_grad to True
+[21:00:34.839934] set model.layers.4.llama_cross_attn.norm2.weight requires_grad to True
+[21:00:34.840025] set model.layers.8.llama_cross_attn.gate requires_grad to True
+[21:00:34.840036] set model.layers.8.llama_cross_attn.attn.ignore_token requires_grad to True
+[21:00:34.840044] set model.layers.8.llama_cross_attn.attn.sampling_offsets.weight requires_grad to True
+[21:00:34.840052] set model.layers.8.llama_cross_attn.attn.sampling_offsets.bias requires_grad to True
+[21:00:34.840061] set model.layers.8.llama_cross_attn.attn.dynamic_offset_mask.weight requires_grad to True
+[21:00:34.840068] set model.layers.8.llama_cross_attn.attn.dynamic_offset_mask.bias requires_grad to True
+[21:00:34.840077] set model.layers.8.llama_cross_attn.attn.attention_weights.weight requires_grad to True
+[21:00:34.840085] set model.layers.8.llama_cross_attn.attn.attention_weights.bias requires_grad to True
+[21:00:34.840094] set model.layers.8.llama_cross_attn.attn.value_proj.weight requires_grad to True
+[21:00:34.840101] set model.layers.8.llama_cross_attn.attn.value_proj.bias requires_grad to True
+[21:00:34.840109] set model.layers.8.llama_cross_attn.attn.output_proj.weight requires_grad to True
+[21:00:34.840118] set model.layers.8.llama_cross_attn.attn.output_proj.bias requires_grad to True
+[21:00:34.840126] set model.layers.8.llama_cross_attn.attn.query_relpos.weight requires_grad to True
+[21:00:34.840136] set model.layers.8.llama_cross_attn.norm1.weight requires_grad to True
+[21:00:34.840144] set model.layers.8.llama_cross_attn.norm2.weight requires_grad to True
+[21:00:34.840232] set model.layers.12.llama_cross_attn.gate requires_grad to True
+[21:00:34.840242] set model.layers.12.llama_cross_attn.attn.ignore_token requires_grad to True
+[21:00:34.840251] set model.layers.12.llama_cross_attn.attn.sampling_offsets.weight requires_grad to True
+[21:00:34.840258] set model.layers.12.llama_cross_attn.attn.sampling_offsets.bias requires_grad to True
+[21:00:34.840267] set model.layers.12.llama_cross_attn.attn.dynamic_offset_mask.weight requires_grad to True
+[21:00:34.840274] set model.layers.12.llama_cross_attn.attn.dynamic_offset_mask.bias requires_grad to True
+[21:00:34.840283] set model.layers.12.llama_cross_attn.attn.attention_weights.weight requires_grad to True
+[21:00:34.840291] set model.layers.12.llama_cross_attn.attn.attention_weights.bias requires_grad to True
+[21:00:34.840299] set model.layers.12.llama_cross_attn.attn.value_proj.weight requires_grad to True
+[21:00:34.840307] set model.layers.12.llama_cross_attn.attn.value_proj.bias requires_grad to True
+[21:00:34.840315] set model.layers.12.llama_cross_attn.attn.output_proj.weight requires_grad to True
+[21:00:34.840323] set model.layers.12.llama_cross_attn.attn.output_proj.bias requires_grad to True
+[21:00:34.840332] set model.layers.12.llama_cross_attn.attn.query_relpos.weight requires_grad to True
+[21:00:34.840341] set model.layers.12.llama_cross_attn.norm1.weight requires_grad to True
+[21:00:34.840349] set model.layers.12.llama_cross_attn.norm2.weight requires_grad to True
+[21:00:34.840433] set model.layers.16.llama_cross_attn.gate requires_grad to True
+[21:00:34.840443] set model.layers.16.llama_cross_attn.attn.ignore_token requires_grad to True
+[21:00:34.840452] set model.layers.16.llama_cross_attn.attn.sampling_offsets.weight requires_grad to True
+[21:00:34.840459] set model.layers.16.llama_cross_attn.attn.sampling_offsets.bias requires_grad to True
+[21:00:34.840467] set model.layers.16.llama_cross_attn.attn.dynamic_offset_mask.weight requires_grad to True
+[21:00:34.840475] set model.layers.16.llama_cross_attn.attn.dynamic_offset_mask.bias requires_grad to True
+[21:00:34.840483] set model.layers.16.llama_cross_attn.attn.attention_weights.weight requires_grad to True
+[21:00:34.840491] set model.layers.16.llama_cross_attn.attn.attention_weights.bias requires_grad to True
+[21:00:34.840499] set model.layers.16.llama_cross_attn.attn.value_proj.weight requires_grad to True
+[21:00:34.840507] set model.layers.16.llama_cross_attn.attn.value_proj.bias requires_grad to True
+[21:00:34.840515] set model.layers.16.llama_cross_attn.attn.output_proj.weight requires_grad to True
+[21:00:34.840523] set model.layers.16.llama_cross_attn.attn.output_proj.bias requires_grad to True
+[21:00:34.840532] set model.layers.16.llama_cross_attn.attn.query_relpos.weight requires_grad to True
+[21:00:34.840540] set model.layers.16.llama_cross_attn.norm1.weight requires_grad to True
+[21:00:34.840549] set model.layers.16.llama_cross_attn.norm2.weight requires_grad to True
+[21:00:34.840632] set model.layers.20.llama_cross_attn.gate requires_grad to True
+[21:00:34.840642] set model.layers.20.llama_cross_attn.attn.ignore_token requires_grad to True
+[21:00:34.840651] set model.layers.20.llama_cross_attn.attn.sampling_offsets.weight requires_grad to True
+[21:00:34.840658] set model.layers.20.llama_cross_attn.attn.sampling_offsets.bias requires_grad to True
+[21:00:34.840667] set model.layers.20.llama_cross_attn.attn.dynamic_offset_mask.weight requires_grad to True
+[21:00:34.840674] set model.layers.20.llama_cross_attn.attn.dynamic_offset_mask.bias requires_grad to True
+[21:00:34.840682] set model.layers.20.llama_cross_attn.attn.attention_weights.weight requires_grad to True
+[21:00:34.840689] set model.layers.20.llama_cross_attn.attn.attention_weights.bias requires_grad to True
+[21:00:34.840698] set model.layers.20.llama_cross_attn.attn.value_proj.weight requires_grad to True
+[21:00:34.840706] set model.layers.20.llama_cross_attn.attn.value_proj.bias requires_grad to True
+[21:00:34.840714] set model.layers.20.llama_cross_attn.attn.output_proj.weight requires_grad to True
+[21:00:34.840721] set model.layers.20.llama_cross_attn.attn.output_proj.bias requires_grad to True
+[21:00:34.840730] set model.layers.20.llama_cross_attn.attn.query_relpos.weight requires_grad to True
+[21:00:34.840739] set model.layers.20.llama_cross_attn.norm1.weight requires_grad to True
+[21:00:34.840748] set model.layers.20.llama_cross_attn.norm2.weight requires_grad to True
+[21:00:34.840834] set model.layers.24.llama_cross_attn.gate requires_grad to True
+[21:00:34.840845] set model.layers.24.llama_cross_attn.attn.ignore_token requires_grad to True
+[21:00:34.840853] set model.layers.24.llama_cross_attn.attn.sampling_offsets.weight requires_grad to True
+[21:00:34.840861] set model.layers.24.llama_cross_attn.attn.sampling_offsets.bias requires_grad to True
+[21:00:34.840870] set model.layers.24.llama_cross_attn.attn.dynamic_offset_mask.weight requires_grad to True
+[21:00:34.840877] set model.layers.24.llama_cross_attn.attn.dynamic_offset_mask.bias requires_grad to True
+[21:00:34.840886] set model.layers.24.llama_cross_attn.attn.attention_weights.weight requires_grad to True
+[21:00:34.840893] set model.layers.24.llama_cross_attn.attn.attention_weights.bias requires_grad to True
+[21:00:34.840902] set model.layers.24.llama_cross_attn.attn.value_proj.weight requires_grad to True
+[21:00:34.840910] set model.layers.24.llama_cross_attn.attn.value_proj.bias requires_grad to True
+[21:00:34.840918] set model.layers.24.llama_cross_attn.attn.output_proj.weight requires_grad to True
+[21:00:34.840926] set model.layers.24.llama_cross_attn.attn.output_proj.bias requires_grad to True
+[21:00:34.840934] set model.layers.24.llama_cross_attn.attn.query_relpos.weight requires_grad to True
+[21:00:34.840943] set model.layers.24.llama_cross_attn.norm1.weight requires_grad to True
+[21:00:34.840951] set model.layers.24.llama_cross_attn.norm2.weight requires_grad to True
+[21:00:34.841037] set model.layers.28.llama_cross_attn.gate requires_grad to True
+[21:00:34.841047] set model.layers.28.llama_cross_attn.attn.ignore_token requires_grad to True
+[21:00:34.841056] set model.layers.28.llama_cross_attn.attn.sampling_offsets.weight requires_grad to True
+[21:00:34.841064] set model.layers.28.llama_cross_attn.attn.sampling_offsets.bias requires_grad to True
+[21:00:34.841072] set model.layers.28.llama_cross_attn.attn.dynamic_offset_mask.weight requires_grad to True
+[21:00:34.841080] set model.layers.28.llama_cross_attn.attn.dynamic_offset_mask.bias requires_grad to True
+[21:00:34.841088] set model.layers.28.llama_cross_attn.attn.attention_weights.weight requires_grad to True
+[21:00:34.841095] set model.layers.28.llama_cross_attn.attn.attention_weights.bias requires_grad to True
+[21:00:34.841104] set model.layers.28.llama_cross_attn.attn.value_proj.weight requires_grad to True
+[21:00:34.841111] set model.layers.28.llama_cross_attn.attn.value_proj.bias requires_grad to True
+[21:00:34.841120] set model.layers.28.llama_cross_attn.attn.output_proj.weight requires_grad to True
+[21:00:34.841127] set model.layers.28.llama_cross_attn.attn.output_proj.bias requires_grad to True
+[21:00:34.841135] set model.layers.28.llama_cross_attn.attn.query_relpos.weight requires_grad to True
+[21:00:34.841144] set model.layers.28.llama_cross_attn.norm1.weight requires_grad to True
+[21:00:34.841152] set model.layers.28.llama_cross_attn.norm2.weight requires_grad to True
+[21:00:34.841232] set model.layers.32.llama_cross_attn.gate requires_grad to True
+[21:00:34.841243] set model.layers.32.llama_cross_attn.attn.ignore_token requires_grad to True
+[21:00:34.841251] set model.layers.32.llama_cross_attn.attn.sampling_offsets.weight requires_grad to True
+[21:00:34.841259] set model.layers.32.llama_cross_attn.attn.sampling_offsets.bias requires_grad to True
+[21:00:34.841267] set model.layers.32.llama_cross_attn.attn.dynamic_offset_mask.weight requires_grad to True
+[21:00:34.841274] set model.layers.32.llama_cross_attn.attn.dynamic_offset_mask.bias requires_grad to True
+[21:00:34.841282] set model.layers.32.llama_cross_attn.attn.attention_weights.weight requires_grad to True
+[21:00:34.841289] set model.layers.32.llama_cross_attn.attn.attention_weights.bias requires_grad to True
+[21:00:34.841298] set model.layers.32.llama_cross_attn.attn.value_proj.weight requires_grad to True
+[21:00:34.841306] set model.layers.32.llama_cross_attn.attn.value_proj.bias requires_grad to True
+[21:00:34.841314] set model.layers.32.llama_cross_attn.attn.output_proj.weight requires_grad to True
+[21:00:34.841321] set model.layers.32.llama_cross_attn.attn.output_proj.bias requires_grad to True
+[21:00:34.841331] set model.layers.32.llama_cross_attn.attn.query_relpos.weight requires_grad to True
+[21:00:34.841339] set model.layers.32.llama_cross_attn.norm1.weight requires_grad to True
+[21:00:34.841347] set model.layers.32.llama_cross_attn.norm2.weight requires_grad to True
+[21:00:34.841427] set model.layers.36.llama_cross_attn.gate requires_grad to True
+[21:00:34.841438] set model.layers.36.llama_cross_attn.attn.ignore_token requires_grad to True
+[21:00:34.841446] set model.layers.36.llama_cross_attn.attn.sampling_offsets.weight requires_grad to True
+[21:00:34.841453] set model.layers.36.llama_cross_attn.attn.sampling_offsets.bias requires_grad to True
+[21:00:34.841462] set model.layers.36.llama_cross_attn.attn.dynamic_offset_mask.weight requires_grad to True
+[21:00:34.841469] set model.layers.36.llama_cross_attn.attn.dynamic_offset_mask.bias requires_grad to True
+[21:00:34.841478] set model.layers.36.llama_cross_attn.attn.attention_weights.weight requires_grad to True
+[21:00:34.841485] set model.layers.36.llama_cross_attn.attn.attention_weights.bias requires_grad to True
+[21:00:34.841493] set model.layers.36.llama_cross_attn.attn.value_proj.weight requires_grad to True
+[21:00:34.841501] set model.layers.36.llama_cross_attn.attn.value_proj.bias requires_grad to True
+[21:00:34.841510] set model.layers.36.llama_cross_attn.attn.output_proj.weight requires_grad to True
+[21:00:34.841517] set model.layers.36.llama_cross_attn.attn.output_proj.bias requires_grad to True
+[21:00:34.841525] set model.layers.36.llama_cross_attn.attn.query_relpos.weight requires_grad to True
+[21:00:34.841533] set model.layers.36.llama_cross_attn.norm1.weight requires_grad to True
+[21:00:34.841542] set model.layers.36.llama_cross_attn.norm2.weight requires_grad to True
+[21:00:36.445678] init Blip2QFormerMultiHeadAttention with qk_norm
+[21:00:36.511386] init Blip2QFormerMultiHeadAttention with qk_norm
+[21:00:36.661231] ['v2-1_512-nonema-pruned.safetensors', 'v2-1_512-ema-pruned.safetensors', 'unet', 'scheduler', 'text_encoder', 'v2-1_512-ema-pruned.ckpt', 'tokenizer', 'vae', '.gitattributes', 'feature_extractor', 'v2-1_512-nonema-pruned.ckpt', 'README.md', 'model_index.json']

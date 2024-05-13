@@ -1,16 +1,20 @@
 [
     {
         "sentences": [
-            "a kitchen is shown with a variety of items on the counters."
+            "sit on the table with"
+
         ],
         "images": [
-            "./assets/dataset/coco/val2014/COCO_val2014_000000384213.jpg"
+            "/mnt/lustre/chenhaoran/CIIT/MM-interleaved/assets/huge.jpg",
+            "/mnt/lustre/chenhaoran/CIIT/MM-interleaved/assets/suzy.jpg"
         ],
         "sentence_ixs": [
+            0,
             0 
         ],
         "image_first": [
-            false 
+            true,
+            false
         ],
         "generate_mode": "generate_images",
         "num_iter": 1
@@ -18,18 +22,45 @@
 
     {
         "sentences": [
-            "A photo of"
+            "with the expression of"
         ],
         "images": [
-            "./assets/dataset/coco/val2014/COCO_val2014_000000384213.jpg"
+            "/mnt/lustre/chenhaoran/CIIT/MM-interleaved/assets/suzy.jpg",
+            "/mnt/lustre/chenhaoran/CIIT/MM-interleaved/assets/loopy.jpg"
         ],
         "sentence_ixs": [
-            0 
+            0,
+            0
         ],
         "image_first": [
-            true
+            true,
+            false
         ],
-        "generate_mode": "generate_texts",
+        "generate_mode": "generate_images",
         "num_iter": 1
+    },
+    {
+        "sentences": [
+            "a dialogue between the most beautiful Korean girl Suzy ",
+            "and a cutiest animation figure Loopy. They are arguing why they are more popular than the other.",
+            "Suzy: I am more popular because I always act elegant."
+
+        ],
+        "images": [
+            "/mnt/lustre/chenhaoran/CIIT/MM-interleaved/assets/suzy.jpg",
+            "/mnt/lustre/chenhaoran/CIIT/MM-interleaved/assets/loopy.jpg"
+        ],
+        "sentence_ixs": [
+            0,
+            1 
+        ],
+        "image_first": [
+            false,
+            false
+        ],
+        "generate_mode": "generate_images",
+        "num_iter": 6
     }
+
+
 ]
