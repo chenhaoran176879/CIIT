@@ -1,0 +1,60 @@
+/mnt/lustre/chenhaoran/anaconda3/envs/torch201cu118/lib/python3.10/site-packages/mmcv/__init__.py:20: UserWarning: On January 1, 2023, MMCV will release v2.0.0, in which it will remove components related to the training process and add a data transformation module. In addition, it will rename the package names mmcv to mmcv-lite and mmcv-full to mmcv. See https://github.com/open-mmlab/mmcv/blob/master/docs/en/compatibility.md for more details.
+  warnings.warn(
+Traceback (most recent call last):
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/torch201cu118/lib/python3.10/site-packages/transformers/configuration_utils.py", line 672, in _get_config_dict
+    resolved_config_file = cached_file(
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/torch201cu118/lib/python3.10/site-packages/transformers/utils/hub.py", line 417, in cached_file
+    resolved_file = hf_hub_download(
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/torch201cu118/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 111, in _inner_fn
+    validate_repo_id(arg_value)
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/torch201cu118/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 159, in validate_repo_id
+    raise HFValidationError(
+huggingface_hub.utils._validators.HFValidationError: Repo id must be in the form 'repo_name' or 'namespace/repo_name': './assets/lmsys/vicuna-13b-v1.3'. Use `repo_type` argument if needed.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/lustre/chenhaoran/CIIT/MM-interleaved/inference.py", line 304, in <module>
+    main()
+  File "/mnt/lustre/chenhaoran/CIIT/MM-interleaved/inference.py", line 293, in main
+    model = MMInterleaved(**config.model)
+  File "/mnt/lustre/chenhaoran/CIIT/MM-interleaved/mm_interleaved/models/mm_interleaved.py", line 60, in __init__
+    llm_config = LlamaConfig.from_pretrained(llm_model_path)
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/torch201cu118/lib/python3.10/site-packages/transformers/configuration_utils.py", line 590, in from_pretrained
+    config_dict, kwargs = cls.get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/torch201cu118/lib/python3.10/site-packages/transformers/configuration_utils.py", line 617, in get_config_dict
+    config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/torch201cu118/lib/python3.10/site-packages/transformers/configuration_utils.py", line 693, in _get_config_dict
+    raise EnvironmentError(
+OSError: Can't load the configuration of './assets/lmsys/vicuna-13b-v1.3'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure './assets/lmsys/vicuna-13b-v1.3' is the correct path to a directory containing a config.json file
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 40291) of binary: /mnt/lustre/chenhaoran/anaconda3/envs/torch201cu118/bin/python
+Traceback (most recent call last):
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/torch201cu118/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/torch201cu118/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 346, in wrapper
+    return f(*args, **kwargs)
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/torch201cu118/lib/python3.10/site-packages/torch/distributed/run.py", line 794, in main
+    run(args)
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/torch201cu118/lib/python3.10/site-packages/torch/distributed/run.py", line 785, in run
+    elastic_launch(
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/torch201cu118/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 134, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/torch201cu118/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 250, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/mnt/lustre/chenhaoran/CIIT/MM-interleaved/inference.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2024-04-18_15:18:29
+  host      : dx-ai-node11
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 40291)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+srun: error: dx-ai-node11: task 0: Exited with exit code 1

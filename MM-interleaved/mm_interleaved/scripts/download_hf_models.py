@@ -21,7 +21,7 @@ os.makedirs(path, exist_ok=True)
 clip_model.save_pretrained(path)
 clip_processor.save_pretrained(path)
 
-version = 'stabilityai/stable-diffusion-2-base'
+version = 'stabilityai/stable-diffusion-2-1-base'
 path = os.path.join('./assets', version)
 os.makedirs(path, exist_ok=True)
 pipe = StableDiffusionPipeline.from_pretrained(version, torch_dtype=torch.float32)
