@@ -1031,6 +1031,49 @@ class VisDialCollator:
         )
 
 
+class CIITCollator:
+    def __init__(self):
+        pass
+
+    def __call__(self, data_list):
+        image_ids = []
+        image_tensors = []
+        context_ids = []
+        context_attn_masks = []
+        options_ids = []
+        options_attn_masks = []
+        # gt_relevances = []
+
+        for data in data_list:
+            image_ids.append(data["image_id"])
+            image_tensor = data["image_tensor"]
+            if isinstance(image_tensor, np.ndarray):
+                image_tensor = torch.from_numpy(image_tensor)
+            image_tensors.append(image_tensor)
+            context_ids.append(data["text_ids"])
+            context_attn_masks.append(data["attn_mask"])
+            options_ids.append(data["options_ids"])
+            options_attn_masks.append(data["options_attn_mask"])
+            # gt_relevances.append(data['gt_relevance'])
+
+        image_ids = torch.tensor(image_ids)
+        image_tensors = torch.stack(image_tensors)
+        num_image_per_seq = torch.ones(
+            (image_tensors.shape[0],), dtype=torch.long, device=image_tensors.device
+        )
+
+        return dict(
+            text_ids=context_ids,
+            image_tensors=image_tensors,
+            num_image_per_seq=num_image_per_seq,
+            attention_mask=context_attn_masks,
+            # gt_relevances=gt_relevances,
+            options_ids=options_ids,
+            options_attn_masks=options_attn_masks,
+            image_ids=image_ids,
+        )
+
+
 class RICES:
     def __init__(
         self,

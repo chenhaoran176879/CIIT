@@ -13,6 +13,7 @@ from .wds_utils import init_tokenizer
 import torch
 import transformers
 from torch.utils.data import Dataset
+from .loader import BaseDataset
 from PIL import Image
 
 def is_img(data):
@@ -83,7 +84,7 @@ def get_interleave_form(text):
     return result
 
 
-class CIITDataset(Dataset):
+class CIITDataset(BaseDataset):
     def __init__(
         self, 
         annt_files,
@@ -98,7 +99,7 @@ class CIITDataset(Dataset):
 
         ):
 
-        super.__init__()
+        super().__init__()
         self.annt_files = annt_files
         self.max_test_sample_num = total_sample_num if total_sample_num else 1e10
 
@@ -117,13 +118,13 @@ class CIITDataset(Dataset):
             self.image_subseq = "<|beginofimage|>" + self.image_subseq
 
 
-        self.
+        self.tokenizer = init_tokenizer(tokenizer_path)
         self.load_database()
         print(f"length of the dataset is {self.__len__()}")
 
     def load_database(self):
         self.data = []
-        annt_files = [os.path.join(self.annt_root,x) for x in self.annt_files]
+        annt_files = self.annt_files#[os.path.join(self.annt_root,x) for x in self.annt_files]
         for file_path in annt_files:
             with open(file_path, 'r') as f:
                 for line in f:
@@ -178,7 +179,7 @@ class CIITDataset(Dataset):
                 'text':multimodal_text,
                 'images_tensor': image_tensors,
                 #'multimodal_context':multimodal_context,
-                'meta_info':meta_info
+                'meta':meta_info
                   }
 
 

@@ -36,8 +36,8 @@ def main():
     print("Data Loading Start")
     train_dataset = build_dataset(config.data.train)
     print(train_dataset)
-    eval_dataset = build_dataset(config.data.val)
-    print(eval_dataset)
+    #eval_dataset = build_dataset(config.data.val)
+    #print(eval_dataset)
 
     print("Model Init Start")
     model = MMInterleaved(**config.model)
@@ -51,7 +51,7 @@ def main():
         args=train_args,
         train_dataset=train_dataset,
         data_collator=train_dataset.collator,
-        eval_dataset=eval_dataset,
+        #eval_dataset=eval_dataset,
         eval_collator=None,
     )
 

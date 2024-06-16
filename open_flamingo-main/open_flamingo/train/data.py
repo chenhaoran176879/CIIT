@@ -267,6 +267,10 @@ def preprocess_interleaved(
         (text_tensor["input_ids"], text_tensor["attention_mask"]),
     )
 
+def get_ciit_dataset(args):
+    
+    return
+
 
 def get_mmc4_dataset(args, image_processor, tokenizer, epoch=0, floor=False):
     """
