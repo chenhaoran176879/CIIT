@@ -41,7 +41,7 @@ def main():
 
     print("Model Init Start")
     model = MMInterleaved(**config.model)
-    print(model)
+    #print(model)
 
     print("Trainer Init Start")
     trainer = LMMTrainer(

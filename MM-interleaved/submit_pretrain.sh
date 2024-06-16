@@ -12,4 +12,4 @@ echo slurm_job_node_list: $SLURM_JOB_NODELIST
 echo slurm_ntasks_per_node: $SLURM_NTASKS_PER_NODE
 
 
-srun run_ciit_pretrain.sh
+srun run_mm_pretrain.sh
