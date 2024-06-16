@@ -230,7 +230,8 @@ class LMMTrainer(transformers.Trainer):
             dataloader_params["sampler"] = self._get_train_sampler()
             dataloader_params["drop_last"] = self.args.dataloader_drop_last
             dataloader_params["worker_init_fn"] = seed_worker
-
+        
+        #return DataLoader(train_dataset, **dataloader_params)
         return self.accelerator.prepare(DataLoader(train_dataset, **dataloader_params))
 
     def create_optimizer(self):
@@ -349,14 +350,14 @@ class LMMTrainer(transformers.Trainer):
                                     p.data_ptr(): p.numel() for p in module.parameters()
                                 }.values()
                             )
-                            logger.info(f"skipped {module}: {skipped/2**20}M params")
+                            print(f"skipped {module}: {skipped/2**20}M params")
                             manager.register_module_override(
                                 module, "weight", {"optim_bits": 32}
                             )
                             logger.debug(
                                 f"bitsandbytes: will optimize {module} in fp32"
                             )
-                    logger.info(f"skipped: {skipped/2**20}M params")
+                    print(f"skipped: {skipped/2**20}M params")
 
         if is_sagemaker_mp_enabled():
             self.optimizer = smp.DistributedOptimizer(self.optimizer)
@@ -789,7 +790,7 @@ class LMMTrainer(transformers.Trainer):
                 "args.max_steps must be set to a positive value if dataloader does not have a length, was"
                 f" {args.max_steps}"
             )
-
+        print("LLMTrainer _inner_training_loop point 0")
         # Compute absolute values for logging, eval, and save if given as ratio
         if args.logging_steps and args.logging_steps < 1:
             args.logging_steps = math.ceil(max_steps * args.logging_steps)
@@ -815,7 +816,7 @@ class LMMTrainer(transformers.Trainer):
             or is_sagemaker_mp_enabled()
             or self.fsdp is not None
         )
-
+        
         # We need to reset the scheduler, as its parameters may be different on subsequent calls
         if self._created_lr_scheduler:
             self.lr_scheduler = None
@@ -831,24 +832,24 @@ class LMMTrainer(transformers.Trainer):
 
         self.state = TrainerState()
         self.state.is_hyper_param_search = trial is not None
-
         # Activate gradient checkpointing if needed
         if args.gradient_checkpointing:
             self.model.gradient_checkpointing_enable()
 
         model = self._wrap_model(self.model_wrapped)
-
+        
         if is_sagemaker_mp_enabled() and resume_from_checkpoint is not None:
             self._load_from_checkpoint(resume_from_checkpoint, model)
-
+        
         # as the model is wrapped, don't use `accelerator.prepare`
         # this is for unhandled cases such as
         # Fairscale Sharded DDP, FSDP-XLA, SageMaker MP/DP, DataParallel, IPEX
         use_accelerator_prepare = True if model is self.model else False
-
+        print("use_accelerator_prepare:",use_accelerator_prepare)
+        #use_accelerator_prepare=False
         if delay_optimizer_creation:
             self.create_optimizer_and_scheduler(num_training_steps=max_steps)
-
+        
         # prepare using `accelerator` prepare
         if use_accelerator_prepare:
             self.model.train()
@@ -856,15 +857,19 @@ class LMMTrainer(transformers.Trainer):
                 if self.use_apex:
                     model = self.accelerator.prepare(self.model)
                 else:
+                    print("LLMTrainer _inner_training_loop point 000")
                     model, self.optimizer = self.accelerator.prepare(
                         self.model, self.optimizer
                     )
+
+                    print("LLMTrainer _inner_training_loop point 001")
             else:
                 # to handle cases wherein we pass "DummyScheduler" such as when it is specified in DeepSpeed config.
                 model, self.optimizer, self.lr_scheduler = self.accelerator.prepare(
                     self.model, self.optimizer, self.lr_scheduler
                 )
-
+               
+        
         if self.is_fsdp_enabled:
             self.model = model
 
@@ -883,33 +888,33 @@ class LMMTrainer(transformers.Trainer):
             )
             deepspeed_load_checkpoint(self.model_wrapped, resume_from_checkpoint)
             print(f"{self.model_wrapped.optimizer=} {self.model_wrapped.lr_scheduler=}")
-
+        
         # Check if saved optimizer or scheduler states exist
         self._load_optimizer_and_scheduler(resume_from_checkpoint)
-
+        
         # important: at this point:
         # self.model         is the Transformers Model
         # self.model_wrapped is DDP(Transformers Model), Deepspeed(Transformers Model), etc.
 
         # Train!
-        logger.info("***** Running training *****")
-        logger.info(f"  Num examples = {num_examples:,}")
-        logger.info(f"  Num Epochs = {num_train_epochs:,}")
-        logger.info(
+        print("***** Running training *****")
+        print(f"  Num examples = {num_examples:,}")
+        print(f"  Num Epochs = {num_train_epochs:,}")
+        print(
             f"  Instantaneous batch size per device = {self.args.per_device_train_batch_size:,}"
         )
         if self.args.per_device_train_batch_size != self._train_batch_size:
-            logger.info(
+            print(
                 f"  Training with DataParallel so batch size has been adjusted to: {self._train_batch_size:,}"
             )
-        logger.info(
+        print(
             f"  Total train batch size (w. parallel, distributed & accumulation) = {total_train_batch_size:,}"
         )
-        logger.info(
+        print(
             f"  Gradient Accumulation steps = {args.gradient_accumulation_steps}"
         )
-        logger.info(f"  Total optimization steps = {max_steps:,}")
-        logger.info(
+        print(f"  Total optimization steps = {max_steps:,}")
+        print(
             f"  Number of trainable parameters = {get_model_param_count(model, trainable_only=True):,}"
         )
 
@@ -935,15 +940,15 @@ class LMMTrainer(transformers.Trainer):
             else:
                 steps_trained_in_current_epoch = 0
 
-            logger.info(
+            print(
                 "  Continuing training from checkpoint, will skip to saved global_step"
             )
-            logger.info(f"  Continuing training from epoch {epochs_trained}")
-            logger.info(
+            print(f"  Continuing training from epoch {epochs_trained}")
+            print(
                 f"  Continuing training from global step {self.state.global_step}"
             )
             if not args.ignore_data_skip:
-                logger.info(
+                print(
                     f"  Will skip the first {epochs_trained} epochs then the first"
                     f" {steps_trained_in_current_epoch} batches in the first epoch."
                 )
@@ -979,11 +984,11 @@ class LMMTrainer(transformers.Trainer):
         self._total_loss_scalar = 0.0
         self._globalstep_last_logged = self.state.global_step
         model.zero_grad()
-
+        print("LLMTrainer _inner_training_loop point 1")
         self.control = self.callback_handler.on_train_begin(
             args, self.state, self.control
         )
-
+        print("LLMTrainer _inner_training_loop point 2")
         # Skip the first epochs_trained epochs to get the random state of the dataloader at the right point.
         if not args.ignore_data_skip:
             for epoch in range(epochs_trained):
@@ -1032,7 +1037,11 @@ class LMMTrainer(transformers.Trainer):
                     rng_to_sync = True
 
             step = -1
+            print("LLMTrainer _inner_training_loop point 3")
+            print(epoch_iterator)
+            print("LLMTrainer _inner_training_loop point bug")
             for step, inputs in enumerate(epoch_iterator):
+                print("LLMTrainer _inner_training_loop step ",step)
                 total_batched_samples += 1
                 if rng_to_sync:
                     self._load_rng_state(resume_from_checkpoint)
@@ -1214,7 +1223,7 @@ class LMMTrainer(transformers.Trainer):
             # Clean the state at the end of training
             delattr(self, "_past")
 
-        logger.info(
+        print(
             "\n\nTraining completed. Do not forget to share your model on huggingface.co/models =)\n\n"
         )
         if args.load_best_model_at_end and self.state.best_model_checkpoint is not None:
@@ -1263,7 +1272,7 @@ class LMMTrainer(transformers.Trainer):
         ):
             for checkpoint in checkpoints_sorted:
                 if checkpoint != self.state.best_model_checkpoint:
-                    logger.info(
+                    print(
                         f"Deleting older checkpoint [{checkpoint}] due to args.save_total_limit"
                     )
                     shutil.rmtree(checkpoint)
@@ -1966,12 +1975,12 @@ class LMMTrainer(transformers.Trainer):
 
         batch_size = self.args.eval_batch_size
 
-        logger.info(f"***** Running {description} *****")
+        print(f"***** Running {description} *****")
         if has_length(dataloader):
-            logger.info(f"  Num examples = {self.num_examples(dataloader)}")
+            print(f"  Num examples = {self.num_examples(dataloader)}")
         else:
-            logger.info("  Num examples: Unknown")
-        logger.info(f"  Batch size = {batch_size}")
+            print("  Num examples: Unknown")
+        print(f"  Batch size = {batch_size}")
 
         model.eval()
 

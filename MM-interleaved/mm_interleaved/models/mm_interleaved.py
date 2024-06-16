@@ -69,6 +69,7 @@ class MMInterleaved(nn.Module):
         llm_config.spatial_shapes = spatial_shapes
         self.spatial_shapes = spatial_shapes
         llm_model = LlamaForCausalLM.from_pretrained(llm_model_path, config=llm_config)
+        print(f"LlamaForCausalLM.from_pretrained {llm_model_path}")
         orig_txt_vocab_size = llm_model.config.vocab_size
         llm_model.resize_token_embeddings(txt_vocab_size)
         llm_model.requires_grad_(False)

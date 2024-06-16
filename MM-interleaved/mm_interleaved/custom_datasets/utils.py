@@ -48,6 +48,9 @@ def build_dataset(config):
         datasets = []
         for _config in config.datasets:
             datasets.append(_build_dataset(_config))
+        
+        if len(datasets) == 1: return datasets[0] # HACK by CHR
+
         dataset = RandomMixWdsDataset(
             datasets=datasets,
             probs=getattr(config, "probs", None),

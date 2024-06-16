@@ -24,7 +24,7 @@ if [[ $local_rank == 0 ]]; then
 
 
 
-    /mnt/lustre/chenhaoran/anaconda3/envs/torch201cu118/bin/torchrun \
+    /mnt/lustre/chenhaoran/anaconda3/envs/torch201cu118/bin/accelerate launch \
     --nnodes=$node_num --node_rank=${node_rank} \
     --master_addr=${master_addr} \
     --nproc_per_node=${gpu_per_node} \
