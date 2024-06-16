@@ -33,6 +33,7 @@ from .flintstones import FlintStonesDataset
 from .ade20k import ADE20kDataset
 from .sft_datasets import WeightedConcatDataset
 from .sft_datasets import LLaVADataset
+from .CIITDataset import CIITDataset
 
 from .collator import build_data_collator
 
@@ -63,8 +64,19 @@ def build_dataset(config):
 
 def _build_dataset(config):
     transform = create_transform(**config.transform)
+    if config.name == "ciit":
+        dataset = CIITDataset(
+            annt_files=config.annt_files,
+            image_root=config.image_root,
+            tokenizer_path=config.tokenizer_path,
+            transforms=transform,
+            num_img_token=config.num_img_token,
+            add_eos=getattr(config, "add_eos", None),
+            add_soi_token=getattr(config, "add_soi_token", True),
+            total_sample_num=getattr(config, " total_sample_num", None),
+        )
 
-    if config.name == "coco":
+    elif config.name == "coco":
         dataset = CocoCaptionDataset(
             data_root=config.data_root,
             annt_root=config.annt_root,
