@@ -4,7 +4,7 @@ fp16: True
 max_steps: 15_000
 per_device_train_batch_size: &per_device_train_batch_size 4
 per_device_eval_batch_size: 2
-dataloader_num_workers: &num_workers 8
+dataloader_num_workers: &num_workers 1
 data_seed: &data_seed 0
 seed: 32
 
@@ -89,14 +89,13 @@ model:
 
 data:
   train:
-    name: random_mix
+    name: single
     probs: [1.]
     sampling_type: longest
     seed: *data_seed
     dataset_names: [ciit]
 
     datasets:
-
     - name: ciit
       annt_files: ["/home/yidongyi/ImageDataSets/dingchenglin_imgs/baidujingyan_tuwen_data_2023-12-06.jsonl","/home/yidongyi/ImageDataSets/dingchenglin_imgs/tuwen_2023-11-02.jsonl"]
       image_root: ""

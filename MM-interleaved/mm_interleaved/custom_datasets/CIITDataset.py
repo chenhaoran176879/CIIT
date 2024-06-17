@@ -15,6 +15,7 @@ import transformers
 from torch.utils.data import Dataset
 from .loader import BaseDataset
 from PIL import Image
+import random
 
 def is_img(data):
     if isinstance(data,list):
@@ -175,12 +176,18 @@ class CIITDataset(BaseDataset):
         if self.add_eos:
             text += self.add_eos
         
-        return  {
+        if len(image_tensors)==0:
+            return self.__getitem__(max(idx+random.randint(200,400),self.__len__()-1))
+        
+
+        return_dict=  {
                 'text':multimodal_text,
                 'images_tensor': image_tensors,
                 #'multimodal_context':multimodal_context,
                 'meta':meta_info
                   }
+        #print(return_dict)
+        return return_dict
 
 
     def get_meta_info(self,idx):

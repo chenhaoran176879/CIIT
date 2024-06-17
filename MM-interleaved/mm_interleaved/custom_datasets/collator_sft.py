@@ -183,11 +183,9 @@ class MultiImageCollator:
         image_loss_mask_all = []
 
         for data in data_list:
-            meta.append(data["meta"])
-
             images_tensor = data["images_tensor"]
             assert len(images_tensor) > 0
-
+            meta.append(data["meta"])
             images_tensor = self._convert_images_tensor(images_tensor)
             if isinstance(images_tensor, tuple):
                 images_tensor, images_tensor_dec = images_tensor
@@ -238,7 +236,7 @@ class MultiImageCollator:
             meta=meta,
             image_loss_mask=image_loss_mask,
         )
-
+        
         return data
 
     def _convert_images_tensor(self, images_tensor):

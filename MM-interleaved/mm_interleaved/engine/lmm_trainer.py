@@ -231,6 +231,7 @@ class LMMTrainer(transformers.Trainer):
             dataloader_params["drop_last"] = self.args.dataloader_drop_last
             dataloader_params["worker_init_fn"] = seed_worker
         
+        
         #return DataLoader(train_dataset, **dataloader_params)
         return self.accelerator.prepare(DataLoader(train_dataset, **dataloader_params))
 
@@ -668,6 +669,7 @@ class LMMTrainer(transformers.Trainer):
 
         model.train()
         inputs = self._prepare_inputs(inputs)
+        #inputs = inputs.to("cuda:0") # HACK by chr
 
         if is_sagemaker_mp_enabled():
             loss_mb = smp_forward_backward(
@@ -837,7 +839,8 @@ class LMMTrainer(transformers.Trainer):
             self.model.gradient_checkpointing_enable()
 
         model = self._wrap_model(self.model_wrapped)
-        
+
+
         if is_sagemaker_mp_enabled() and resume_from_checkpoint is not None:
             self._load_from_checkpoint(resume_from_checkpoint, model)
         
@@ -845,7 +848,8 @@ class LMMTrainer(transformers.Trainer):
         # this is for unhandled cases such as
         # Fairscale Sharded DDP, FSDP-XLA, SageMaker MP/DP, DataParallel, IPEX
         use_accelerator_prepare = True if model is self.model else False
-        print("use_accelerator_prepare:",use_accelerator_prepare)
+        #use_accelerator_prepare = False
+        logger.info("use_accelerator_prepare:",use_accelerator_prepare)
         #use_accelerator_prepare=False
         if delay_optimizer_creation:
             self.create_optimizer_and_scheduler(num_training_steps=max_steps)
@@ -857,12 +861,11 @@ class LMMTrainer(transformers.Trainer):
                 if self.use_apex:
                     model = self.accelerator.prepare(self.model)
                 else:
-                    print("LLMTrainer _inner_training_loop point 000")
                     model, self.optimizer = self.accelerator.prepare(
                         self.model, self.optimizer
                     )
 
-                    print("LLMTrainer _inner_training_loop point 001")
+                    
             else:
                 # to handle cases wherein we pass "DummyScheduler" such as when it is specified in DeepSpeed config.
                 model, self.optimizer, self.lr_scheduler = self.accelerator.prepare(
@@ -883,11 +886,11 @@ class LMMTrainer(transformers.Trainer):
 
         # deepspeed ckpt loading
         if resume_from_checkpoint is not None and self.is_deepspeed_enabled:
-            print(
+            logger.info(
                 f"deepspeed resume checkpoint from {resume_from_checkpoint}, {type(self.model_wrapped)=}"
             )
             deepspeed_load_checkpoint(self.model_wrapped, resume_from_checkpoint)
-            print(f"{self.model_wrapped.optimizer=} {self.model_wrapped.lr_scheduler=}")
+            logger.info(f"{self.model_wrapped.optimizer=} {self.model_wrapped.lr_scheduler=}")
         
         # Check if saved optimizer or scheduler states exist
         self._load_optimizer_and_scheduler(resume_from_checkpoint)
@@ -897,24 +900,24 @@ class LMMTrainer(transformers.Trainer):
         # self.model_wrapped is DDP(Transformers Model), Deepspeed(Transformers Model), etc.
 
         # Train!
-        print("***** Running training *****")
-        print(f"  Num examples = {num_examples:,}")
-        print(f"  Num Epochs = {num_train_epochs:,}")
-        print(
+        logger.info("***** Running training *****")
+        logger.info(f"  Num examples = {num_examples:,}")
+        logger.info(f"  Num Epochs = {num_train_epochs:,}")
+        logger.info(
             f"  Instantaneous batch size per device = {self.args.per_device_train_batch_size:,}"
         )
         if self.args.per_device_train_batch_size != self._train_batch_size:
-            print(
+            logger.info(
                 f"  Training with DataParallel so batch size has been adjusted to: {self._train_batch_size:,}"
             )
-        print(
+        logger.info(
             f"  Total train batch size (w. parallel, distributed & accumulation) = {total_train_batch_size:,}"
         )
-        print(
+        logger.info(
             f"  Gradient Accumulation steps = {args.gradient_accumulation_steps}"
         )
-        print(f"  Total optimization steps = {max_steps:,}")
-        print(
+        logger.info(f"  Total optimization steps = {max_steps:,}")
+        logger.info(
             f"  Number of trainable parameters = {get_model_param_count(model, trainable_only=True):,}"
         )
 
@@ -940,15 +943,15 @@ class LMMTrainer(transformers.Trainer):
             else:
                 steps_trained_in_current_epoch = 0
 
-            print(
+            logger.info(
                 "  Continuing training from checkpoint, will skip to saved global_step"
             )
-            print(f"  Continuing training from epoch {epochs_trained}")
-            print(
+            logger.info(f"  Continuing training from epoch {epochs_trained}")
+            logger.info(
                 f"  Continuing training from global step {self.state.global_step}"
             )
             if not args.ignore_data_skip:
-                print(
+                logger.info(
                     f"  Will skip the first {epochs_trained} epochs then the first"
                     f" {steps_trained_in_current_epoch} batches in the first epoch."
                 )
@@ -984,11 +987,11 @@ class LMMTrainer(transformers.Trainer):
         self._total_loss_scalar = 0.0
         self._globalstep_last_logged = self.state.global_step
         model.zero_grad()
-        print("LLMTrainer _inner_training_loop point 1")
+        
         self.control = self.callback_handler.on_train_begin(
             args, self.state, self.control
         )
-        print("LLMTrainer _inner_training_loop point 2")
+     
         # Skip the first epochs_trained epochs to get the random state of the dataloader at the right point.
         if not args.ignore_data_skip:
             for epoch in range(epochs_trained):
@@ -1037,9 +1040,7 @@ class LMMTrainer(transformers.Trainer):
                     rng_to_sync = True
 
             step = -1
-            print("LLMTrainer _inner_training_loop point 3")
-            print(epoch_iterator)
-            print("LLMTrainer _inner_training_loop point bug")
+            print("LLMTrainer _inner_training_loop point 1")
             for step, inputs in enumerate(epoch_iterator):
                 print("LLMTrainer _inner_training_loop step ",step)
                 total_batched_samples += 1
@@ -1072,6 +1073,31 @@ class LMMTrainer(transformers.Trainer):
                     self.control = self.callback_handler.on_step_begin(
                         args, self.state, self.control
                     )
+
+
+                # print(f"Model device: {next(model.parameters()).device}")
+                # # 打印数据张量所在的设备
+                # print("inputs image_tensors in _inner_training_loop: ", inputs['image_tensors'],)
+                # print("inputs image_tensors device in _inner_training_loop: ", inputs['image_tensors'].device)
+                
+                # if torch.cuda.is_available():
+                #     # 获取 CUDA 设备数量
+                #     num_devices = torch.cuda.device_count()
+                #     print(f"Number of CUDA devices: {num_devices}")
+                #     device = torch.cuda.current_device()
+                #     print(f"Current device:{device}, {torch.cuda.get_device_name(device)}")
+
+                # model.to(device)
+                # inputs_cuda = {}
+                # for key,value in inputs.items():
+                #     if isinstance(value,torch.Tensor):
+                #         inputs_cuda[key]=value.to(device)
+                #     else:
+                #         inputs_cuda[key]=value
+                
+                # inputs = inputs_cuda
+                    
+
 
                 with self.accelerator.accumulate(model):
                     tr_loss_step = self.training_step(model, inputs)
@@ -1210,7 +1236,7 @@ class LMMTrainer(transformers.Trainer):
             # if DebugOption.TPU_METRICS_DEBUG in self.args.debug:
             #     if is_torch_tpu_available():
             #         # tpu-comment: Logging debug metrics for PyTorch/XLA (compile, execute times, ops, etc.)
-            #         xm.master_print(met.metrics_report())
+            #         xm.master_logger.info(met.metrics_report())
             #     else:
             #         logger.warning(
             #             "You enabled PyTorch/XLA debug metrics but you don't have a TPU "
@@ -1223,7 +1249,7 @@ class LMMTrainer(transformers.Trainer):
             # Clean the state at the end of training
             delattr(self, "_past")
 
-        print(
+        logger.info(
             "\n\nTraining completed. Do not forget to share your model on huggingface.co/models =)\n\n"
         )
         if args.load_best_model_at_end and self.state.best_model_checkpoint is not None:
@@ -1320,7 +1346,7 @@ class LMMTrainer(transformers.Trainer):
         if not isinstance(eval_dataset, torch.utils.data.IterableDataset):
             dataloader_params["sampler"] = self._get_eval_sampler(eval_dataset)
             dataloader_params["drop_last"] = self.args.dataloader_drop_last
-
+    
         return self.accelerator.prepare(DataLoader(eval_dataset, **dataloader_params))
 
     def _inner_generation_loop(
