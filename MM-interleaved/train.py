@@ -30,14 +30,16 @@ def main():
     init_distributed_mode()
     args = parser.parse_args_with_config_file_into_dataclasses()
     train_args, config = args
+
+    
     print(train_args)
     print(config)
 
+
+
+
     print("Data Loading Start")
     train_dataset = build_dataset(config.data.train)
-    print(train_dataset)
-    #eval_dataset = build_dataset(config.data.val)
-    #print(eval_dataset)
 
     print("Model Init Start")
     model = MMInterleaved(**config.model)

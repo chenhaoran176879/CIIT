@@ -22,13 +22,12 @@ if [[ $local_rank == 0 ]]; then
     train_script=./train.py
     log_file=./OUTPUT/log/mmint-ciit_pretrain_${datetime_str}.log
 
-    /mnt/lustre/chenhaoran/anaconda3/envs/torch201cu118/bin/accelerate launch \
-    --debug \
-    --main_process_ip $master_addr \
-    --main_process_port $master_port \
-    --num_processes $((node_num * gpu_per_node)) \
-    --num_machines $node_num \
-    --machine_rank $node_rank \
+    /mnt/lustre/chenhaoran/anaconda3/envs/torch201cu118/bin/torchrun \
+    --nnodes=$node_num \
+    --node_rank=${node_rank}\
+    --master_addr=${master_addr}\
+    --nproc_per_node=${gpu_per_node}\
+    --master_port=${master_port} \
     ${train_script} \
     --config_file="./mm_interleaved/configs/release/mm_pretrain_cn.yaml" \
     --output_dir="/mnt/lustre/chenhaoran/CIIT/MM-interleaved/OUTPUT/mm_pretrain_ciit_only"

@@ -1,0 +1,10 @@
+compute_environment: SLURM
+distributed_type: multi-node
+num_machines: 2
+num_processes: 8
+num_cpu_threads_per_process: 10
+machine_rank: 0  # 在每个节点上此值会自动递增，不需要手动设置
+main_process_ip: "MAIN_NODE_IP"  # 用主节点的 IP 替换此值
+main_process_port: 29500  # 确保所有节点使用相同的端口
+rdzv_backend: c10d
+rdzv_endpoint: "MAIN_NODE_IP:29500"  # 用主节点的 IP 替换此值

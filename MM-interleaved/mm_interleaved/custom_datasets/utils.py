@@ -49,7 +49,7 @@ def build_dataset(config):
         for _config in config.datasets:
             datasets.append(_build_dataset(_config))
         
-        if len(datasets) == 1: return datasets[0] # HACK by CHR
+        #if len(datasets) == 1: return datasets[0] # HACK by CHR
 
         dataset = RandomMixWdsDataset(
             datasets=datasets,
@@ -61,6 +61,10 @@ def build_dataset(config):
         )
         dataset.collator = None
         return dataset
+    
+    elif config.name == "single":    
+        return _build_dataset(config.datasets[0])
+        
 
     return _build_dataset(config)
 
@@ -78,6 +82,7 @@ def _build_dataset(config):
             add_soi_token=getattr(config, "add_soi_token", True),
             total_sample_num=getattr(config, " total_sample_num", None),
         )
+        
 
     elif config.name == "coco":
         dataset = CocoCaptionDataset(
@@ -387,11 +392,15 @@ def _build_dataset(config):
         raise NotImplementedError(config.name)
 
     if getattr(config, "train_dataset_config", None):
+        print("build data collator with train_dataset_config")
         collator = build_data_collator(
             config, train_dataset=build_dataset(config.train_dataset_config)
         )
     else:
+        print("build data collator")
         collator = build_data_collator(config)
+    
+    print("collator: ",collator)
     dataset.collator = collator
     dataset.dataset_name = config.name
     if not hasattr(dataset, "tokenizer"):
