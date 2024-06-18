@@ -30,6 +30,7 @@ import torch.distributed as dist
 import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset
 from torchvision.utils import save_image
+#torch.set_printoptions(threshold=torch.inf)
 
 import diffusers
 import datasets
@@ -669,7 +670,7 @@ class LMMTrainer(transformers.Trainer):
 
         model.train()
         inputs = self._prepare_inputs(inputs)
-        #inputs = inputs.to("cuda:0") # HACK by chr
+        
 
         if is_sagemaker_mp_enabled():
             loss_mb = smp_forward_backward(
@@ -792,7 +793,7 @@ class LMMTrainer(transformers.Trainer):
                 "args.max_steps must be set to a positive value if dataloader does not have a length, was"
                 f" {args.max_steps}"
             )
-        print("LLMTrainer _inner_training_loop point 0")
+
         # Compute absolute values for logging, eval, and save if given as ratio
         if args.logging_steps and args.logging_steps < 1:
             args.logging_steps = math.ceil(max_steps * args.logging_steps)
@@ -1040,9 +1041,9 @@ class LMMTrainer(transformers.Trainer):
                     rng_to_sync = True
 
             step = -1
-            print("LLMTrainer _inner_training_loop point 1")
+
             for step, inputs in enumerate(epoch_iterator):
-                print("LLMTrainer _inner_training_loop step ",step)
+                #print("LLMTrainer _inner_training_loop step ",step)
                 total_batched_samples += 1
                 if rng_to_sync:
                     self._load_rng_state(resume_from_checkpoint)
@@ -1073,30 +1074,6 @@ class LMMTrainer(transformers.Trainer):
                     self.control = self.callback_handler.on_step_begin(
                         args, self.state, self.control
                     )
-
-
-                # print(f"Model device: {next(model.parameters()).device}")
-                # # 打印数据张量所在的设备
-                # print("inputs image_tensors in _inner_training_loop: ", inputs['image_tensors'],)
-                # print("inputs image_tensors device in _inner_training_loop: ", inputs['image_tensors'].device)
-                
-                # if torch.cuda.is_available():
-                #     # 获取 CUDA 设备数量
-                #     num_devices = torch.cuda.device_count()
-                #     print(f"Number of CUDA devices: {num_devices}")
-                #     device = torch.cuda.current_device()
-                #     print(f"Current device:{device}, {torch.cuda.get_device_name(device)}")
-
-                # model.to(device)
-                # inputs_cuda = {}
-                # for key,value in inputs.items():
-                #     if isinstance(value,torch.Tensor):
-                #         inputs_cuda[key]=value.to(device)
-                #     else:
-                #         inputs_cuda[key]=value
-                
-                # inputs = inputs_cuda
-                    
 
 
                 with self.accelerator.accumulate(model):

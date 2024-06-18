@@ -290,43 +290,36 @@ def save_on_master(*args, **kwargs):
 
 
 def init_distributed_mode(use_dynamic_port: bool = False):
-    if "SLURM_PROCID" in os.environ:
-        rank = int(os.environ["SLURM_PROCID"])
-        local_rank = rank % torch.cuda.device_count()
+    env_vars = {key: os.environ.get(key) for key in [
+        "SLURM_PROCID", "SLURM_NTASKS", "SLURM_NTASKS_PER_NODE", "LOCAL_SIZE",
+        "MASTER_PORT", "SLURM_STEP_NODELIST", "MASTER_ADDR", "RANK",
+        "LOCAL_WORLD_SIZE", "WORLD_SIZE"
+    ]}
 
-        world_size = int(os.environ["SLURM_NTASKS"])
-        try:
-            local_size = int(os.environ["SLURM_NTASKS_PER_NODE"])
-        except:
-            local_size = int(os.environ.get("LOCAL_SIZE", 1))
+    # 使用 f-string 格式化字符串，如果环境变量为 None，则打印 'None'
+    print(f"list of env concerning distributed mode\n"
+        f"SLURM_PROCID: {env_vars['SLURM_PROCID']} \n"
+        f"SLURM_NTASKS: {env_vars['SLURM_NTASKS']} \n"
+        f"SLURM_NTASKS_PER_NODE: {env_vars['SLURM_NTASKS_PER_NODE']} \n"
+        f"LOCAL_SIZE: {env_vars['LOCAL_SIZE']} \n"
+        f"MASTER_PORT: {env_vars['MASTER_PORT']} \n"
+        f"SLURM_STEP_NODELIST: {env_vars['SLURM_STEP_NODELIST']} \n"
+        f"MASTER_ADDR: {env_vars['MASTER_ADDR']} \n"
+        f"RANK: {env_vars['RANK']} \n"
+        f"LOCAL_WORLD_SIZE: {env_vars['LOCAL_WORLD_SIZE']} \n"
+        f"WORLD_SIZE: {env_vars['WORLD_SIZE']} \n")
+    
 
-        if "MASTER_PORT" not in os.environ:
-            port = 22110
-            if use_dynamic_port:
-                for i in range(22110, 65535):
-                    cmd = f"netstat -aon|grep {i}"
-                    with os.popen(cmd, "r") as file:
-                        if file.read() == "":
-                            port = i
-                            break
 
-            print(f"MASTER_PORT = {port}")
-            os.environ["MASTER_PORT"] = str(port)
+    rank = int(os.environ["RANK"])
+    local_rank = rank % torch.cuda.device_count()
+    print("torch.cuda.device_count(): ",torch.cuda.device_count(),"local_rank set to:",local_rank)
+    world_size = int(os.environ["SLURM_NTASKS"])
+    local_size = int(os.environ["SLURM_NTASKS_PER_NODE"])
+    node_list = os.environ["SLURM_STEP_NODELIST"]
+    os.environ["LOCAL_RANK"] = str(local_rank)
 
-            time.sleep(3)
 
-        node_list = os.environ["SLURM_STEP_NODELIST"]
-        addr = subprocess.getoutput(f"scontrol show hostname {node_list} | head -n1")
-        if "MASTER_ADDR" not in os.environ:
-            os.environ["MASTER_ADDR"] = addr
-
-        os.environ["RANK"] = str(rank)
-        os.environ["LOCAL_RANK"] = str(local_rank)
-        os.environ["LOCAL_WORLD_SIZE"] = str(local_size)
-        os.environ["WORLD_SIZE"] = str(world_size)
-
-    else:
-        rank = int(os.environ["RANK"])
 
     setup_for_distributed(rank == 0)
 

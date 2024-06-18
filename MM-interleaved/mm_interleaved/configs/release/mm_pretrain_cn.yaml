@@ -1,10 +1,11 @@
 # Training Arguments
 
+load_from: './OUTPUT/mm_interleaved_pretrain'
 fp16: True
 max_steps: 15_000
 per_device_train_batch_size: &per_device_train_batch_size 4
 per_device_eval_batch_size: 2
-dataloader_num_workers: &num_workers 1
+dataloader_num_workers: &num_workers 8
 data_seed: &data_seed 0
 seed: 32
 
@@ -53,13 +54,13 @@ deepspeed: './mm_interleaved/configs/release/deepspeed_zero1.json'
 
 # MODEL
 
-load_form: './OUTPUT/mm_interleaved_pretrain'
+
 model:
   llm_model_path: &tokenizer_path ./assets/lmsys/vicuna-13b-v1.3
   num_img_token: &img_len 64
   cross_attention_frequency: 4
 
-  dataset_to_ignore_noimage_cond_loss: [laion_en, laion_coco]
+  dataset_to_ignore_noimage_cond_loss: [laion_en, laion_coco, ciit]
 
   visual_tokenizer_config:
     encoder_model_path: ./assets/openai/clip-vit-large-patch14

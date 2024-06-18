@@ -34,7 +34,10 @@ def main():
     
     print(train_args)
     print(config)
-
+    if getattr(config, "load_from", None):
+        print("Loading pretrained weights from ",config.load_from)
+    else:
+        raise KeyError("Invalid load_from path for loading pretrained weights, config: ",config)
 
 
 
@@ -58,7 +61,11 @@ def main():
     )
 
     if getattr(config, "load_from", None):
+        print("Loading pretrained weights from ",config.load_from)
         load_model_weights(trainer.model, config.load_from)
+    
+    else: 
+        raise KeyError("Invalid load_from path for loading pretrained weights")
     
     print("Training Start")
     trainer.train(
