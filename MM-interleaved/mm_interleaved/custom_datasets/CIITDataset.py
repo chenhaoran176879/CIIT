@@ -110,7 +110,7 @@ class CIITDataset(BaseDataset):
         self.add_soi_token = add_soi_token
         self.add_eos = add_eos
         self.num_img_token = num_img_token
-
+        self.dataset_name = 'ciit' # HACK by chr
 
         #assert collate_mode in ["train", "generate_texts", "generate_images"]
         
@@ -144,14 +144,14 @@ class CIITDataset(BaseDataset):
         #if meta_info.get('title',None):
         #    text = meta_info['title'] + '\n' + text
         
-
+        
 
         text_interleaved = get_interleave_form(text)
         image_file = os.path.join(self.img_root, meta_info['AIGC_info'][0]['img_save_dir'])
 
-        multimodal_context = []
+
         image_tensors = []
-        multimodal_text = ""
+        multimodal_text = []
         for modality in text_interleaved:
             if modality.startswith('<image>') and modality.endswith('</image>'):
                 img_id = modality[len("<image>"):-len("</image>")]
@@ -166,27 +166,55 @@ class CIITDataset(BaseDataset):
                 if self.transforms:
                     image = self.transforms(image)
                 
-                multimodal_context.append(image)
-                multimodal_text += f"{self.image_subseq}"
+                multimodal_text.append(self.image_subseq)
                 image_tensors.append(image)
             else:
-                multimodal_context.append(modality)
-                multimodal_text += modality
+                multimodal_text.append(modality)
 
         if self.add_eos:
             text += self.add_eos
+
+
+        max_text_token_len =2048
+        text_tensor=None
+        while True:
+            text_tensor = self.tokenizer(
+                    ''.join(multimodal_text),
+                    truncation=False,
+                    #max_length=self.tokenizer.model_max_length,
+                    padding='longest',
+                    return_tensors="pt",
+                    return_attention_mask=True,
+                )
+            
+            text_ids = text_tensor.input_ids
+            text_token_len=len(text_ids[0])
+            if text_token_len<=max_text_token_len:
+                break
+            else:
+                last_text = multimodal_text.pop()
+                if last_text==self.image_subseq:
+                    image_tensors.pop()
+
+        print(f"\ntest in dataset\n{multimodal_text=}\n{text_ids[0]=}\n{len(text_ids[0])=}\n")
+
+
+        text = ''.join(multimodal_text)
+
+
+       
         
         if len(image_tensors)==0:
             return self.__getitem__(max(idx+random.randint(200,400),self.__len__()-1))
         
-
+        meta_info['dataset_name'] = self.dataset_name # HACK by chr
         return_dict=  {
                 'text':multimodal_text,
+                'text_tensor': text_tensor,
                 'images_tensor': image_tensors,
-                #'multimodal_context':multimodal_context,
-                'meta':meta_info
+                'meta':meta_info,
+                'dataset_name': self.dataset_name
                   }
-        #print(return_dict)
         return return_dict
 
 

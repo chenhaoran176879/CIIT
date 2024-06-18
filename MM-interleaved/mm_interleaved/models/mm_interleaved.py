@@ -122,6 +122,7 @@ class MMInterleaved(nn.Module):
     def _prepare_mm_embeds(
         self,
         text_ids: torch.LongTensor,
+        texts: list=None,
         image_tensors: Optional[torch.FloatTensor] = None,
         num_image_per_seq: Optional[torch.Tensor] = None,
         meta: Optional[Union[torch.Tensor, List]] = None,
@@ -130,6 +131,7 @@ class MMInterleaved(nn.Module):
 
         # step 1. get text token embeds
         text_embeds = self.mm_decoder.get_input_embeddings()(text_ids)
+        print(f"{text_embeds.shape=}")
         B, L, C = text_embeds.shape
 
         assert num_image_per_seq.sum() == image_tensors.shape[0], (
@@ -140,17 +142,29 @@ class MMInterleaved(nn.Module):
         # step 2. get image embeds
         visual_output = self.visual_tokenizer(image_tensors)
         valid_image_embeds = visual_output["vis_embed"]
+
+
+
         valid_image_embeds = rearrange(valid_image_embeds, "b l c -> (b l) c")
+
+
+
 
         # step 3. insert image embeds into text embeds
         image_token_pos_x, image_token_pos_y = (
             text_ids == self.special_token_dict["image_token_id"]
         ).nonzero(as_tuple=True)
         image_token_pos = image_token_pos_x * L + image_token_pos_y
+        
+        
+        if image_token_pos.shape[0] != valid_image_embeds.shape[0]:
+           import json
+           with open('tensor_debug.json','a') as f:
+               json.dump(text_ids.tolist().append(texts),f)
         assert image_token_pos.shape[0] == valid_image_embeds.shape[0], (
             f"{image_token_pos.shape=}, {valid_image_embeds.shape=}\n"
             f"{meta}\n"
-            f"{text_ids[:,:100]} \n {text_ids[:,-100:]}"
+            f"{text_ids}\n"
         )
         text_embeds = rearrange(text_embeds, "b l c -> (b l) c")
         text_embeds = text_embeds.to(valid_image_embeds.dtype)
@@ -362,6 +376,7 @@ class MMInterleaved(nn.Module):
                 gt_text_ids[idx, :offset] = -100
 
         # ignore text loss without image as prefix
+        
         ignore_noimage_cond_loss = (
             meta["dataset_name"] in self.dataset_to_ignore_noimage_cond_loss
         )

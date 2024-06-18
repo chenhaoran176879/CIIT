@@ -180,12 +180,15 @@ class MultiImageCollator:
         images_tensors_dec_all = []
         meta = []
         text_inputs = []
+        text_input_tensors = []
         image_loss_mask_all = []
+        dataset_name = ''
 
         for data in data_list:
             images_tensor = data["images_tensor"]
             assert len(images_tensor) > 0
             meta.append(data["meta"])
+            dataset_name=data['dataset_name']
             images_tensor = self._convert_images_tensor(images_tensor)
             if isinstance(images_tensor, tuple):
                 images_tensor, images_tensor_dec = images_tensor
@@ -197,19 +200,41 @@ class MultiImageCollator:
                 image_loss_mask[self.ignore_image_loss_idx] = 0.
                 image_loss_mask_all.append(image_loss_mask)
 
-            text_inputs.append(data["text"])
+            if 'text_tensor' in data:
+                text_input_tensors.append(data['text_tensor'])
+            elif 'text' in data:
+                text_inputs.append(data["text"])
 
-        self.tokenizer.padding_side = "right"
-        text_tensor = self.tokenizer(
-            text_inputs,
-            truncation=True,
-            max_length=self.tokenizer.model_max_length,
-            padding=self.padding,
-            return_tensors="pt",
-            return_attention_mask=True,
-        )
-        text_ids = text_tensor.input_ids
-        attn_mask = text_tensor.attention_mask
+
+        if len(text_input_tensors) == len(data_list):
+            text_ids_list = [tensor.input_ids for tensor in text_input_tensors]
+            attn_mask_list = [tensor.attention_mask for tensor in text_input_tensors]
+            text_ids = torch.cat(text_ids_list, dim=0)
+            attn_mask = torch.cat(attn_mask_list, dim=0)
+
+
+        
+        elif len(text_inputs) == len(data_list):
+            print("tokenize text in collator")
+            self.tokenizer.padding_side = "right"
+            text_tensor = self.tokenizer(
+                text_inputs,
+                truncation=True,
+                max_length=self.tokenizer.model_max_length,
+                padding=self.padding,
+                return_tensors="pt",
+                return_attention_mask=True,
+            )
+            text_ids = text_tensor.input_ids
+            attn_mask = text_tensor.attention_mask
+
+
+        
+        #torch.set_printoptions(threshold=torch.inf)
+        #print(f"features in collator:\n {data_list=}\n{text_ids=}\n{len(text_ids)=}\n")
+        #torch.set_printoptions(profile="default")
+        from time import sleep
+        sleep(2)
 
         images_tensors = torch.stack(images_tensors_all, dim=0)
         image_tensors_dec = None
@@ -227,10 +252,15 @@ class MultiImageCollator:
             num_image_per_seq, dtype=torch.long, device=images_tensors.device
         )
 
+        meta = dict(
+            meta=meta,
+            dataset_name=dataset_name
+        )
         data = dict(
             image_tensors=images_tensors,
             image_tensors_dec=image_tensors_dec,
             num_image_per_seq=num_image_per_seq,
+            texts = text_inputs,
             text_ids=text_ids,
             attention_mask=attn_mask,
             meta=meta,

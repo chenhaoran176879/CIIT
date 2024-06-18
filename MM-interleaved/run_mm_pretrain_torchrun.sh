@@ -9,6 +9,15 @@ gpu_per_node=$SLURM_NTASKS_PER_NODE
 node_rank=$SLURM_NODEID
 local_rank=$SLURM_LOCALID
 
+echo master_addr: $master_addr
+echo master_port: $master_port
+echo node_num: $node_num
+echo gpu_per_node: $gpu_per_node
+echo node_rank: $node_rank
+
+
+
+
 export LD_LIBRARY_PATH="/mnt/lustre/chenhaoran/anaconda3/envs/torch201cu118/lib":${LD_LIBRARY_PATH}
 
 if [[ $local_rank == 0 ]]; then
