@@ -200,7 +200,7 @@ class MultiImageCollator:
                 image_loss_mask[self.ignore_image_loss_idx] = 0.
                 image_loss_mask_all.append(image_loss_mask)
 
-            if 'text_tensor' in data:
+            if data.get('text_tensor'):
                 text_input_tensors.append(data['text_tensor'])
             elif 'text' in data:
                 text_inputs.append(data["text"])
@@ -209,8 +209,26 @@ class MultiImageCollator:
         if len(text_input_tensors) == len(data_list):
             text_ids_list = [tensor.input_ids for tensor in text_input_tensors]
             attn_mask_list = [tensor.attention_mask for tensor in text_input_tensors]
-            text_ids = torch.cat(text_ids_list, dim=0)
-            attn_mask = torch.cat(attn_mask_list, dim=0)
+
+            # padding to longest
+            max_length = max([ids.size(1) for ids in text_ids_list])
+            padded_text_ids_list = []
+            padded_attn_mask_list = []
+            for ids, mask in zip(text_ids_list, attn_mask_list):
+                padding_length = max_length - ids.size(1)
+                padded_ids = torch.nn.functional.pad(ids, (0, padding_length), value=self.tokenizer.pad_token_id)
+                padded_text_ids_list.append(padded_ids)
+                
+                
+                padded_mask = torch.nn.functional.pad(mask, (0, padding_length), value=0)
+                padded_attn_mask_list.append(padded_mask)
+            try:
+                text_ids = torch.cat(padded_text_ids_list, dim=0)
+                attn_mask = torch.cat(padded_attn_mask_list, dim=0)
+                print("successfully cat:",text_ids.shape,attn_mask.shape)
+            except Exception as e:
+                torch.set_printoptions(threshold=torch.inf)
+                raise ValueError("cannot cat torch tensor:",text_ids_list)
 
 
         
@@ -227,7 +245,7 @@ class MultiImageCollator:
             )
             text_ids = text_tensor.input_ids
             attn_mask = text_tensor.attention_mask
-
+            print(f"{text_ids=},{attn_mask=}")
 
         
         #torch.set_printoptions(threshold=torch.inf)

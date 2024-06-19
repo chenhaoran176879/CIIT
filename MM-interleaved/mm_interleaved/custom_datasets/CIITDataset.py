@@ -182,7 +182,7 @@ class CIITDataset(BaseDataset):
                     ''.join(multimodal_text),
                     truncation=False,
                     #max_length=self.tokenizer.model_max_length,
-                    padding='longest',
+                    #padding='max_length',
                     return_tensors="pt",
                     return_attention_mask=True,
                 )
@@ -196,7 +196,7 @@ class CIITDataset(BaseDataset):
                 if last_text==self.image_subseq:
                     image_tensors.pop()
 
-        print(f"\ntest in dataset\n{multimodal_text=}\n{text_ids[0]=}\n{len(text_ids[0])=}\n")
+        #print(f"\ntest in dataset\n{multimodal_text=}\n{text_ids[0]=}\n{len(text_ids[0])=}\n attention_mask:{text_tensor.attention_mask}")
 
 
         text = ''.join(multimodal_text)
@@ -209,7 +209,7 @@ class CIITDataset(BaseDataset):
         
         meta_info['dataset_name'] = self.dataset_name # HACK by chr
         return_dict=  {
-                'text':multimodal_text,
+                'text':text,
                 'text_tensor': text_tensor,
                 'images_tensor': image_tensors,
                 'meta':meta_info,

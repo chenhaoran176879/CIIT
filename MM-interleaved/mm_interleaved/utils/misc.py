@@ -19,6 +19,7 @@ def load_model_weights(model, ckpt_path, image_upscale=1.0):
             if ckpt_fn.endswith(".bin"):
                 weights = torch.load(os.path.join(ckpt_path, ckpt_fn), "cpu")
                 pretrained_weights.update(weights)
+                print(f'loaded {ckpt_fn}')
     else:
         pretrained_weights = torch.load(ckpt_path, "cpu")
     pos_embed_key = (
