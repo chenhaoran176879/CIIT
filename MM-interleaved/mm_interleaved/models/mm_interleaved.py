@@ -131,7 +131,7 @@ class MMInterleaved(nn.Module):
 
         # step 1. get text token embeds
         text_embeds = self.mm_decoder.get_input_embeddings()(text_ids)
-        print(f"{text_embeds.shape=}")
+        #print(f"{text_embeds.shape=}")
         B, L, C = text_embeds.shape
 
         assert num_image_per_seq.sum() == image_tensors.shape[0], (

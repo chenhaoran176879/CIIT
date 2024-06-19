@@ -43,7 +43,8 @@ def main():
 
     print("Data Loading Start")
     train_dataset = build_dataset(config.data.train)
-
+    #print("test data sample 0 and 1000:", train_dataset[0],train_dataset[1000])
+    
     print("Model Init Start")
     model = MMInterleaved(**config.model)
     #print(model)
@@ -59,13 +60,13 @@ def main():
         #eval_dataset=eval_dataset,
         eval_collator=None,
     )
-
-    if getattr(config, "load_from", None):
-        print("Loading pretrained weights from ",config.load_from)
-        load_model_weights(trainer.model, config.load_from)
+    print("should evaluate: ",trainer.control.should_evaluate)
+    # if getattr(config, "load_from", None):
+    #     print("Loading pretrained weights from ",config.load_from)
+    #     load_model_weights(trainer.model, config.load_from)
     
-    else: 
-        raise KeyError("Invalid load_from path for loading pretrained weights")
+    # else: 
+    #     raise KeyError("Invalid load_from path for loading pretrained weights")
     
     print("Training Start")
     trainer.train(
