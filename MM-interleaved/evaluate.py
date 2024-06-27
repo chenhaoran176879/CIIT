@@ -41,19 +41,21 @@ def evaluate(trainer: LMMTrainer, config):
         print(dataset_metrics)
         print("-" * 100)
         metrics.update(dataset_metrics)
+        if trainer.args.should_save:
+            metrics_to_save = {
+                **metrics,
+                **{"step": trainer.state.global_step},
+            }
+            if trainer.state.epoch is not None:
+                metrics_to_save["epoch"] = round(trainer.state.epoch, 2)
+            metrics_save_path = os.path.join(trainer.args.output_dir, "eval_metrics.jsonl")
+            json_string = json.dumps(metrics_to_save, indent=2, sort_keys=True) + "\n"
+            with open(metrics_save_path, "a+", encoding="utf-8") as f:
+                f.write(json_string)
+
     print("=" * 100)
 
-    if trainer.args.should_save:
-        metrics_to_save = {
-            **metrics,
-            **{"step": trainer.state.global_step},
-        }
-        if trainer.state.epoch is not None:
-            metrics_to_save["epoch"] = round(trainer.state.epoch, 2)
-        metrics_save_path = os.path.join(trainer.args.output_dir, "eval_metrics.jsonl")
-        json_string = json.dumps(metrics_to_save, indent=2, sort_keys=True) + "\n"
-        with open(metrics_save_path, "a+", encoding="utf-8") as f:
-            f.write(json_string)
+    
 
     print("All Finished")
 

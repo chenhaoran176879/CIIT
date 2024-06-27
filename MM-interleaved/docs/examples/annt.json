@@ -1,54 +1,15 @@
 [
     {
         "sentences": [
-            "sit on the table with"
+            "为贯彻落实省高院、开封市中院关于扎实做好全国“两会”期间有关工作文件精神，加强法院机关和法庭安全管理，有效防范化解各类风险隐患，确保“两会”期间安全稳定，2月19日，开封市尉氏县人民法院司法警察大队召开安全保障工作会议，安排部署“两会”期间安全保卫工作。会议由法警大队大队长张瑞喜主持，党组成员马丽梅参加会议并发表讲话，法警大队司法警察、机关及基层法庭安保人员参加会议。",
+            "会上，首先对《尉氏县人民法院机关安全保卫制度》进行了再学习，对其中涉及司法警察、保安、安检人员应尽安保职责的条款进行重点解读。\n随后，马丽梅就做好全国“两会”期间安全维稳工作提出具体要求：\n"
 
+                
         ],
         "images": [
-            "/mnt/lustre/chenhaoran/CIIT/MM-interleaved/assets/huge.jpg",
-            "/mnt/lustre/chenhaoran/CIIT/MM-interleaved/assets/suzy.jpg"
-        ],
-        "sentence_ixs": [
-            0,
-            0 
-        ],
-        "image_first": [
-            true,
-            false
-        ],
-        "generate_mode": "generate_images",
-        "num_iter": 1
-    },
+            "/home/yidongyi/ImageDataSets/dingchenglin_imgs/tuwen/0/cde51f978d02f6036a4c35484caa3c09.jpg",
+            "/home/yidongyi/ImageDataSets/dingchenglin_imgs/tuwen/0/2cccac3609a35cea3391de3f65225014.jpg"
 
-    {
-        "sentences": [
-            "with the expression of"
-        ],
-        "images": [
-            "/mnt/lustre/chenhaoran/CIIT/MM-interleaved/assets/suzy.jpg",
-            "/mnt/lustre/chenhaoran/CIIT/MM-interleaved/assets/loopy.jpg"
-        ],
-        "sentence_ixs": [
-            0,
-            0
-        ],
-        "image_first": [
-            true,
-            false
-        ],
-        "generate_mode": "generate_images",
-        "num_iter": 1
-    },
-    {
-        "sentences": [
-            "a dialogue between the most beautiful Korean girl Suzy ",
-            "and a cutiest animation figure Loopy. They are arguing why they are more popular than the other.",
-            "Suzy: I am more popular because I always act elegant."
-
-        ],
-        "images": [
-            "/mnt/lustre/chenhaoran/CIIT/MM-interleaved/assets/suzy.jpg",
-            "/mnt/lustre/chenhaoran/CIIT/MM-interleaved/assets/loopy.jpg"
         ],
         "sentence_ixs": [
             0,
@@ -58,8 +19,43 @@
             false,
             false
         ],
+        "generate_mode": "generate_both",
+        "num_iter": 2
+    },
+
+    {
+        "sentences": [
+            "一代功夫巨星李小龙，逝后那么多年国内外的人都对他记忆犹新，他是一个时代的回忆，更是代表着当时的一种文化符号，是他让更多的外国友人了解到功夫，把功夫发扬光大的第一人，让KungFu一词写入英文词典。",
+            "李小龙的原名是李振藩，出生于美国加州旧金山，祖籍中国广东省佛山市顺德区均安镇，是武术技击家、武术哲学家、MMA之父，功夫片的开创者和截拳道创始人、华人武打电影演员，更是好莱坞首位华人主角。\n<image>2e79d1727c245da78387740e3d767788</image>\n李小龙1940年年底在美国出生，1941年美国总统罗斯福签署的《1940年移民法案》正式生效，按照相关规定，他在美国出生就有资格申请美国公民，后来就成为了美籍华裔人，即便如此他也照样热爱中国文化，传承中国精神。"
+        ],
+        "images": [
+            "/home/yidongyi/ImageDataSets/dingchenglin_imgs/tuwen/0/f9726adead7757516d3e88e2228223da.jpg"
+        ],
+        "sentence_ixs": [
+            0,
+            1
+        ],
+        "image_first": [
+            false
+        ],
         "generate_mode": "generate_images",
-        "num_iter": 6
+        "num_iter": 1
+    },
+    {
+        "sentences": [
+            "目前距离中国男足0-2完败阿曼的比赛，已经过去了一天的时间，但是关于国人讨论中国男足此次失利的过程却远远没有停止。"
+        ],
+        "images": [
+            "/home/yidongyi/ImageDataSets/dingchenglin_imgs/tuwen/0/16f74a5465c5484f7ca00bacc566e13f.jpg"
+        ],
+        "sentence_ixs": [
+            0
+        ],
+        "image_first": [
+            false
+        ],
+        "generate_mode": "generate_texts",
+        "num_iter": 1
     }
 
 

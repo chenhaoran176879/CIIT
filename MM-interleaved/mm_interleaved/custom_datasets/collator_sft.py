@@ -225,7 +225,7 @@ class MultiImageCollator:
             try:
                 text_ids = torch.cat(padded_text_ids_list, dim=0)
                 attn_mask = torch.cat(padded_attn_mask_list, dim=0)
-                print("successfully cat:",text_ids.shape,attn_mask.shape)
+                #print("successfully cat:",text_ids.shape,attn_mask.shape)
             except Exception as e:
                 torch.set_printoptions(threshold=torch.inf)
                 raise ValueError("cannot cat torch tensor:",text_ids_list)
