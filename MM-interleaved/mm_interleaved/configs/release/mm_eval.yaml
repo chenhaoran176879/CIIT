@@ -1,6 +1,6 @@
 # Training Arguments
 
-load_from: OUTPUT/mm_interleaved_pretrain
+load_from: ./OUTPUT/mm_interleaved_pretrain
 
 fp16: True
 per_device_eval_batch_size: 2
@@ -47,9 +47,10 @@ model:
 
 data:
   val:
+
   - name: coco_karpathy
-    data_root: assets/datasets/coco
-    annt_root: assets/datasets/coco
+    data_root: assets/dataset/coco
+    annt_root: assets/dataset/coco
     phase: test
     year: 2014
 
@@ -63,8 +64,8 @@ data:
       resolution: &image_size 224
   
   - name: flickr30k
-    data_root: assets/datasets/flickr30k/flickr30k-images
-    annt_file: assets/datasets/flickr30k/test1k.token.coco_format
+    data_root: assets/dataset/flickr30k/flickr30k-images
+    annt_file: assets/dataset/flickr30k/test1k.token.coco_format
 
     collator: ImageTextPairCollator
     num_img_token: *img_len
@@ -76,8 +77,8 @@ data:
       resolution: *image_size
 
   - name: nocaps
-    data_root: assets/datasets/nocaps/images
-    annt_file: assets/datasets/nocaps/nocaps_val_4500_captions.json
+    data_root: assets/dataset/nocaps/images
+    annt_file: assets/dataset/nocaps/nocaps_val_4500_captions.json
 
     collator: ImageTextPairCollator
     num_img_token: *img_len
@@ -89,8 +90,8 @@ data:
       resolution: *image_size
 
   - name: image2paragraph
-    data_root: ./assets/datasets/image2paragraph/images/
-    annt_root: ./assets/datasets/image2paragraph
+    data_root: ./assets/dataset/image2paragraph/images/
+    annt_root: ./assets/dataset/image2paragraph
     phase: test
 
     collator: ImageTextPairCollator
@@ -114,8 +115,8 @@ data:
       resolution: *image_size
 
   - name: visdial
-    data_root: assets/datasets/visdial
-    annt_root: assets/datasets/visdial
+    data_root: assets/dataset/visdial
+    annt_root: assets/dataset/visdial
     phase: val
 
     collator: VisDialCollator
@@ -127,9 +128,10 @@ data:
       aug_type: 'numpy'
       resolution: *image_size
 
+
   - name: coco
-    data_root: assets/datasets/coco
-    annt_root: assets/datasets/coco
+    data_root: assets/dataset/coco
+    annt_root: assets/dataset/coco
     phase: val
     year: 2014
     total_length: 30_000
@@ -149,8 +151,8 @@ data:
       resolution: *image_size
 
   - name: lncoco
-    data_root: assets/datasets/coco
-    annt_root: assets/datasets/lncoco
+    data_root: assets/dataset/coco
+    annt_root: assets/dataset/lncoco
     phase: val
     total_length: 30_000
 
@@ -168,8 +170,8 @@ data:
       resolution: *image_size
 
   - name: vqav2
-    data_root: assets/datasets/coco
-    annt_root: assets/datasets/VQAv2
+    data_root: assets/dataset/coco
+    annt_root: assets/dataset/VQAv2
     phase: val
 
     collator: VQACollator
@@ -182,8 +184,8 @@ data:
       resolution: *image_size
 
   - name: okvqa
-    data_root: assets/datasets/coco
-    annt_root: assets/datasets/OK-VQA
+    data_root: assets/dataset/coco
+    annt_root: assets/dataset/OK-VQA
     phase: val
 
     collator: VQACollator
@@ -196,8 +198,8 @@ data:
       resolution: *image_size
 
   - name: vizwiz_vqa
-    data_root: assets/datasets/VizWiz
-    annt_root: assets/datasets/VizWiz
+    data_root: assets/dataset/VizWiz
+    annt_root: assets/dataset/VizWiz
     phase: val
 
     collator: VQACollator
@@ -215,14 +217,28 @@ data:
       resolution: *image_size
 
   - name: textvqa
-    data_root: assets/datasets/textvqa/train_images
-    annt_root: assets/datasets/textvqa/TextVQA
+    data_root: assets/dataset/textvqa/train_images
+    annt_root: assets/dataset/textvqa/
     phase: val
 
     collator: VQACollator
     num_img_token: *img_len
     tokenizer_path: *tokenizer_path
     collate_mode: generate_vqa
+
+    transform:
+      aug_type: 'numpy'
+      resolution: *image_size
+  
+  - name: visdial
+    data_root: assets/dataset/visdial
+    annt_root: assets/dataset/visdial
+    phase: val
+
+    collator: VisDialCollator
+    num_img_token: *img_len
+    tokenizer_path: *tokenizer_path
+    collate_mode: generate_scores
 
     transform:
       aug_type: 'numpy'

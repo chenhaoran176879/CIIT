@@ -205,7 +205,7 @@ class CIITDataset(BaseDataset):
        
         
         if len(image_tensors)==0:
-            return self.__getitem__(max(idx+random.randint(200,400),self.__len__()-1))
+            return self.__getitem__(min(idx+random.randint(200,400),self.__len__()-random.randint(1,100000)))
         
         meta_info['dataset_name'] = self.dataset_name # HACK by chr
         return_dict=  {

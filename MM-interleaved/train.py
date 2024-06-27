@@ -61,12 +61,8 @@ def main():
         eval_collator=None,
     )
     print("should evaluate: ",trainer.control.should_evaluate)
-    # if getattr(config, "load_from", None):
-    #     print("Loading pretrained weights from ",config.load_from)
-    #     load_model_weights(trainer.model, config.load_from)
+
     
-    # else: 
-    #     raise KeyError("Invalid load_from path for loading pretrained weights")
     
     print("Training Start")
     trainer.train(

@@ -1074,10 +1074,17 @@ class LMMTrainer(transformers.Trainer):
                     self.control = self.callback_handler.on_step_begin(
                         args, self.state, self.control
                     )
+                # with self.accelerator.accumulate(model):
+                #     tr_loss_step = self.training_step(model, inputs)
+                try:
+                    with self.accelerator.accumulate(model):
+                        tr_loss_step = self.training_step(model, inputs)
+                
+                except Exception as e:
+                    print(e)
+                    dist.barrier()
+                    continue
 
-
-                with self.accelerator.accumulate(model):
-                    tr_loss_step = self.training_step(model, inputs)
 
                 if (
                     args.logging_nan_inf_filter

@@ -16,7 +16,7 @@ def load_model_weights(model, ckpt_path, image_upscale=1.0):
         pretrained_weights = defaultdict()
         ckpt_files = os.listdir(ckpt_path)
         for ckpt_fn in ckpt_files:
-            if ckpt_fn.endswith(".bin"):
+            if ckpt_fn.endswith(".bin") and ckpt_fn!= 'training_args.bin':
                 weights = torch.load(os.path.join(ckpt_path, ckpt_fn), "cpu")
                 pretrained_weights.update(weights)
                 print(f'loaded {ckpt_fn}')
