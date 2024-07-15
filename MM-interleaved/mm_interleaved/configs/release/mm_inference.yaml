@@ -1,4 +1,4 @@
-load_from: ./OUTPUT/mm_interleaved_pretrain
+load_from: ./OUTPUT/mm_pretrain_ciit_only/checkpoint-37000
 annt_path: ./docs/examples/annt.json
 output_dir: ./OUTPUT/mm_inference
 

@@ -19,8 +19,8 @@
             false,
             false
         ],
-        "generate_mode": "generate_both",
-        "num_iter": 2
+        "generate_mode": "generate_texts",
+        "num_iter": 5
     },
 
     {
@@ -39,7 +39,7 @@
             false
         ],
         "generate_mode": "generate_images",
-        "num_iter": 1
+        "num_iter": 5
     },
     {
         "sentences": [
@@ -55,7 +55,7 @@
             false
         ],
         "generate_mode": "generate_texts",
-        "num_iter": 1
+        "num_iter": 5
     }
 
 

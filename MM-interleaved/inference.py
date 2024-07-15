@@ -283,7 +283,7 @@ def inference_all(model, config, annt_path, output_dir):
 
 def main():
     parser = ArgumentParser(TrainingArguments)
-    init_distributed_mode()
+    #init_distributed_mode()
     args = parser.parse_args_with_config_file_into_dataclasses()
     train_args, config = args
     print(train_args)
