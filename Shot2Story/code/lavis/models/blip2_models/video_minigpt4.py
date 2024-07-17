@@ -255,6 +255,7 @@ class VideoMiniGPT4(Blip2Base):
         # resize image shape
         img_embeds = self.encode_img(video)
         img_embeds = img_embeds.view((bs, n_frms * img_embeds.size(1), img_embeds.size(2)))
+        # batch_size x nframes x hidden_size
         atts_img = torch.ones(img_embeds.size()[:-1], dtype=torch.long).to(video.device)
         
         id_text_mapping = {0: 'first', 1: 'second', 2:'third', 3:'forth', 4:'fifth', 5:'sixth', 

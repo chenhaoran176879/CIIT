@@ -141,9 +141,7 @@ class VideoAVMultiCaptionDataset(CaptionDataset):
         self.fix_total = fix_total
 
     def __getitem__(self, index):
-
         ann = self.annotation[index]
-
         vname = ann["video"]
         caption = self.text_processor(ann["whole_caption"])
         captions_shots = [self.text_processor(cap) for cap in ann["captions"]]
