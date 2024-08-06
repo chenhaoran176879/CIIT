@@ -72,7 +72,7 @@ bash scripts/video/eval/video_detail_description_eval_shard.sh ${Example model} 
 ```
 Example:
 ```bash
-bash scripts/eval/video_detail_description_eval_shard.sh liuhaotian/llava-v1.6-vicuna-7b vicuna_v1 32 2 True 8 
+bash scripts/video/demo/video_demo.sh /mnt/lustre/chenhaoran/model_zoo/llava-next-interleave-qwen-7B/llava-next-interleave-qwen-7b/ vicuna_v1 32 2 average after no_token True playground/demo/xU25MMA2N4aVtYay.mp4 
 ```
 
 ### GPT Evaluation Example (Optional if the above step is completed)
