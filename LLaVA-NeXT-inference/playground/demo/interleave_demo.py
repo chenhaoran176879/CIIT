@@ -187,6 +187,7 @@ def bot(history):
     history[-1]=[text,outputs]
     
     return history
+    
 txt = gr.Textbox(
     scale=4,
     show_label=False,
