@@ -1,5 +1,5 @@
 #!/bin/bash
-ROOT_DIR="/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference"
+ROOT_DIR="/mnt/bn/vl-research/workspace/yhzhang/LLaVA-NeXT"
 
 if [ ! -e $ROOT_DIR ]; then
     echo "The root dir does not exist. Exiting the script."
@@ -16,10 +16,9 @@ CONV_MODE=$2
 FRAMES=$3
 POOL_STRIDE=$4
 POOL_MODE=$5
-POOL_POSITION=$6
-NEWLINE_POSITION=$7
-OVERWRITE=$8
-VIDEO_PATH=$9
+NEWLINE_POSITION=$6
+OVERWRITE=$7
+VIDEO_PATH=$8
 
 
 if [ "$OVERWRITE" = False ]; then
@@ -40,8 +39,5 @@ python3 playground/demo/video_demo.py \
     --for_get_frames_num $FRAMES \
     --conv-mode $CONV_MODE \
     --mm_spatial_pool_mode ${POOL_MODE:-average} \
-    --mm_pooling_position ${POOL_POSITION:-before} \
     --mm_newline_position ${NEWLINE_POSITION:-grid} \
     --prompt "Please provide a detailed description of the video, focusing on the main subjects, their actions, the background scenes."
-
-
