@@ -17,7 +17,7 @@ class SeparatorStyle(Enum):
     PLAIN = auto()
     CHATML = auto()
     LLAMA_2 = auto()
-    #LLAMA_3 = auto()
+    LLAMA_3 = auto()
     QWEN = auto()
     GEMMA = auto()
 
@@ -87,24 +87,26 @@ class Conversation:
             for role, message in messages:
                 if message:
                     if type(message) is tuple:
-                        message, images = message
+                        message, images, _ = message
                         message = "<image>" * len(images) + message
                     ret += role + "\n" + message + self.sep + "\n"
                 else:
                     ret += role + "\n"
             return ret
 
-        # elif self.sep_style == SeparatorStyle.LLAMA_3:
-        #     chat_template_messages = [{"role": "system", "content": self.system}]
-        #     for role, message in messages:
-        #         if message:
-        #             if type(message) is tuple:
-        #                 message, images = message
-        #                 message = "<image>" * len(images) + message
-        #             chat_template_messages.append({"role": role, "content": message})
+        elif self.sep_style == SeparatorStyle.LLAMA_3:
+            if self.tokenizer is None:
+                raise ValueError("Llama 3 tokenizer is not available. Make sure you have the necessary permissions.")
+            chat_template_messages = [{"role": "system", "content": self.system}]
+            for role, message in messages:
+                if message:
+                    if type(message) is tuple:
+                        message, images = message
+                        message = "<image>" * len(images) + message
+                    chat_template_messages.append({"role": role, "content": message})
 
-        #     # print(chat_template_messages)
-        #     return self.tokenizer.apply_chat_template(chat_template_messages, tokenize=False, add_generation_prompt=True)
+            # print(chat_template_messages)
+            return self.tokenizer.apply_chat_template(chat_template_messages, tokenize=False, add_generation_prompt=True)
             # ret = "" if self.system == "" else self.system + self.sep + "\n"
             # for role, message in messages:
             #     if message:
@@ -207,7 +209,7 @@ class Conversation:
 
         max_hw, min_hw = max(image.size), min(image.size)
         aspect_ratio = max_hw / min_hw
-        max_len, min_len = 1008, 672
+        max_len, min_len = 672, 448
         shortest_edge = int(min(max_len / aspect_ratio, min_len, min_hw))
         longest_edge = int(shortest_edge * aspect_ratio)
         W, H = image.size
@@ -233,11 +235,19 @@ class Conversation:
                     if type(image) != list:
                         image = [image]
                     for img in image:
-                        if not return_path:
+                        if not return_path and self.is_image_file(img):
                             img = self.process_image(img, image_process_mode, return_pil=return_pil)
                         else:
                             images.append(img)
         return images
+
+    def is_image_file(self, filename):
+        image_extensions = [".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".webp"]
+        return any(filename.lower().endswith(ext) for ext in image_extensions)
+
+    def is_video_file(self, filename):
+        video_extensions = [".mp4", ".mov", ".avi", ".mkv", ".wmv", ".flv", ".mpeg", ".mpg"]
+        return any(filename.lower().endswith(ext) for ext in video_extensions)
 
     def to_gradio_chatbot(self):
         ret = []
@@ -251,10 +261,24 @@ class Conversation:
                         msg = "<image>\n" + msg.replace("<image>", "").strip()
                     else:
                         msg = re.sub(r"(<image>)\n(?=<image>)", r"\1 ", msg)
+
+                    img_str_list = []                         
                     for img in image:
-                        img_b64_str = self.process_image(img, "Default", return_pil=False, image_format="JPEG")
-                        img_str = f'<img src="data:image/jpeg;base64,{img_b64_str}"/>'
-                        msg = msg.replace("<image>", img_str, 1).strip()
+                        if self.is_image_file(img):
+                            img_b64_str = self.process_image(img, "Default", return_pil=False, image_format="JPEG")
+                            img_str = f'<img src="data:image/jpeg;base64,{img_b64_str}" style="max-width: 256px; max-height: 256px; width: auto; height: auto; object-fit: contain;"/>'
+                            img_str_list.append(img_str)
+                        elif self.is_video_file(img):
+                            ret.append(((img,), None))
+
+                    msg = msg.strip()
+                    img_place_holder = ""
+                    for img_str in img_str_list:
+                        img_place_holder += f"{img_str}\n\n"
+
+                    if len(img_str_list) > 0:
+                        msg = f"{img_place_holder}\n\n{msg}"
+
                     if len(msg) > 0:
                         ret.append([msg, None])
                 else:
@@ -353,18 +377,24 @@ conv_llava_llama_2 = Conversation(
     sep2="</s>",
 )
 
-# conv_llava_llama_3 = Conversation(
-#     system="You are a helpful language and vision assistant. " "You are able to understand the visual content that the user provides, " "and assist the user with a variety of tasks using natural language.",
-#     roles=("user", "assistant"),
-#     version="llama_v3",
-#     messages=[],
-#     offset=0,
-#     sep="<|eot_id|>",
-#     sep_style=SeparatorStyle.LLAMA_3,
-#     tokenizer_id="meta-llama/Meta-Llama-3-8B-Instruct",
-#     tokenizer=AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3-8B-Instruct"),
-#     stop_token_ids=[128009],
-# )
+def safe_load_tokenizer(tokenizer_id):
+    try:
+        return AutoTokenizer.from_pretrained(tokenizer_id)
+    except Exception:
+        return None
+
+conv_llava_llama_3 = Conversation(
+    system="You are a helpful language and vision assistant. " "You are able to understand the visual content that the user provides, " "and assist the user with a variety of tasks using natural language.",
+    roles=("user", "assistant"),
+    version="llama_v3",
+    messages=[],
+    offset=0,
+    sep="<|eot_id|>",
+    sep_style=SeparatorStyle.LLAMA_3,
+    tokenizer_id="meta-llama/Meta-Llama-3-8B-Instruct",
+    tokenizer=safe_load_tokenizer("meta-llama/Meta-Llama-3-8B-Instruct"),
+    stop_token_ids=[128009],
+)
 
 conv_mistral_instruct = Conversation(
     system="",
@@ -540,12 +570,13 @@ conv_templates = {
     "llava_v1": conv_llava_v1,
     "llava_v1_mmtag": conv_llava_v1_mmtag,
     "llava_llama_2": conv_llava_llama_2,
-    #"llava_llama_3": conv_llava_llama_3,
+    "llava_llama_3": conv_llava_llama_3,
     "llava_llama_2_simple": conv_llava_llama_2_simple,
     "llava_llama_2_mmtag": conv_llava_llama_2_mmtag,
     "llava_mistral_instruct": conv_mistral_instruct,
     "mpt": conv_mpt,
     "qwen_1_5": conv_qwen,
+    "qwen_2": conv_qwen,
     "gemma_instruct": conv_gemma_instruct,
 }
 

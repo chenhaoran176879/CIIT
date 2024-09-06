@@ -1,0 +1,2 @@
+slurm_job_node_list: dx-ai-node17
+slurm_ntasks_per_node: 1

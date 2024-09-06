@@ -160,7 +160,6 @@ def video_captioning(args,model,image_processor,tokenizer,video_path,start_frame
 
 
 def main(args):
-
     tokenizer, model, image_processor, context_len = load_pretrained_model(args.model_path, args.model_base, args.model_name, args.load_8bit, args.load_4bit)
     video_file_path = os.path.dirname(args.train_data_path)
 

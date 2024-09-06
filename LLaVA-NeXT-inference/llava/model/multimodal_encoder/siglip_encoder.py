@@ -48,6 +48,8 @@ class SigLipImageProcessor:
         if isinstance(images, Image.Image):
             images = [images]
         else:
+            # to adapt video data
+            images = [to_numpy_array(image) for image in images]
             assert isinstance(images, list)
 
         transforms = [
@@ -526,7 +528,7 @@ class SigLipVisionModel(SigLipPreTrainedModel):
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
         return self.vision_model(
-            pixel_values=pixel_values.to(self.device),
+            pixel_values=pixel_values,
             output_attentions=output_attentions,
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
@@ -560,6 +562,7 @@ class SigLipVisionTower(nn.Module):
 
     def load_model(self, device_map=None):
         if self.is_loaded:
+            rank0_print("{} is already loaded, `load_model` called again, skipping.".format(self.vision_tower_name))
             return
 
         self.vision_tower = SigLipVisionModel.from_pretrained(self.vision_tower_name, device_map=device_map)
@@ -567,11 +570,9 @@ class SigLipVisionTower(nn.Module):
         del self.vision_tower.vision_model.encoder.layers[-1:]
         self.vision_tower.vision_model.head = nn.Identity()
         self.vision_tower.requires_grad_(False)
-        self.vision_tower.eval()
 
         self.is_loaded = True
 
-    @torch.no_grad()
     def forward(self, images):
         if type(images) is list:
             image_features = []
@@ -581,8 +582,7 @@ class SigLipVisionTower(nn.Module):
                 assert image_features.shape[-2] == 729
                 image_features.append(image_feature)
         else:
-            images=images.to(device=self.device, dtype=self.dtype)
-            image_forward_outs = self.vision_tower(images, output_hidden_states=True)
+            image_forward_outs = self.vision_tower(images.to(device=self.device, dtype=self.dtype), output_hidden_states=True)
             image_features = image_forward_outs.hidden_states[-1].to(images.dtype)
             assert image_features.shape[-2] == 729
 
