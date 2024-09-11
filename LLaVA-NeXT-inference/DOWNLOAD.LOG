@@ -1,0 +1,101 @@
+nohup: ignoring input
+Fetching 34 files:   0%|          | 0/34 [00:00<?, ?it/s]Downloading 'model-00013-of-00017.safetensors' to '/home/share/chenhaoran/model_zoo/models--OpenGVLab--InternVL2-40B/blobs/b37c1abdc6235f39ac3f1c543da51cec39b862daea98ca552f36fd1e69ab747f.incomplete' (resume from 4487905280/4756460312)
+Downloading 'model-00010-of-00017.safetensors' to '/home/share/chenhaoran/model_zoo/models--OpenGVLab--InternVL2-40B/blobs/681d56b93f433bddf6c852588c6434c9b4ef98d84ec52dc874b9ce4018eddc68.incomplete' (resume from 2998927360/4756460312)
+Fetching 34 files:  59%|█████▉    | 20/34 [00:10<00:07,  1.85it/s]
+Download complete. Moving file to /home/share/chenhaoran/model_zoo/models--OpenGVLab--InternVL2-40B/blobs/b37c1abdc6235f39ac3f1c543da51cec39b862daea98ca552f36fd1e69ab747f
+Traceback (most recent call last):
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/urllib3/connectionpool.py", line 536, in _make_request
+    response = conn.getresponse()
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/urllib3/connection.py", line 464, in getresponse
+    httplib_response = super().getresponse()
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/http/client.py", line 1375, in getresponse
+    response.begin()
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/ssl.py", line 1307, in recv_into
+    return self.read(nbytes, buffer)
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/ssl.py", line 1163, in read
+    return self._sslobj.read(len, buffer)
+TimeoutError: The read operation timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/requests/adapters.py", line 667, in send
+    resp = conn.urlopen(
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/urllib3/connectionpool.py", line 843, in urlopen
+    retries = retries.increment(
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/urllib3/util/retry.py", line 474, in increment
+    raise reraise(type(error), error, _stacktrace)
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/urllib3/util/util.py", line 39, in reraise
+    raise value
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/urllib3/connectionpool.py", line 789, in urlopen
+    response = self._make_request(
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/urllib3/connectionpool.py", line 538, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/urllib3/connectionpool.py", line 369, in _raise_timeout
+    raise ReadTimeoutError(
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='cdn-lfs-us-1.hf-mirror.com', port=443): Read timed out. (read timeout=10)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/bin/huggingface-cli", line 8, in <module>
+    sys.exit(main())
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/huggingface_hub/commands/huggingface_cli.py", line 52, in main
+    service.run()
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/huggingface_hub/commands/download.py", line 146, in run
+    print(self._download())  # Print path to downloaded files
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/huggingface_hub/commands/download.py", line 180, in _download
+    return snapshot_download(
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/huggingface_hub/_snapshot_download.py", line 299, in snapshot_download
+    thread_map(
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/tqdm/contrib/concurrent.py", line 69, in thread_map
+    return _executor_map(ThreadPoolExecutor, fn, *iterables, **tqdm_kwargs)
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/tqdm/contrib/concurrent.py", line 51, in _executor_map
+    return list(tqdm_class(ex.map(fn, *iterables, chunksize=chunksize), **kwargs))
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/tqdm/std.py", line 1181, in __iter__
+    for obj in iterable:
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/concurrent/futures/_base.py", line 621, in result_iterator
+    yield _result_or_cancel(fs.pop())
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/concurrent/futures/_base.py", line 319, in _result_or_cancel
+    return fut.result(timeout)
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/concurrent/futures/_base.py", line 458, in result
+    return self.__get_result()
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/concurrent/futures/_base.py", line 403, in __get_result
+    raise self._exception
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/huggingface_hub/_snapshot_download.py", line 273, in _inner_hf_hub_download
+    return hf_hub_download(
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/huggingface_hub/utils/_deprecation.py", line 101, in inner_f
+    return f(*args, **kwargs)
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1241, in hf_hub_download
+    return _hf_hub_download_to_cache_dir(
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1390, in _hf_hub_download_to_cache_dir
+    _download_to_tmp_and_move(
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1916, in _download_to_tmp_and_move
+    http_get(
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 463, in http_get
+    r = _request_wrapper(
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 399, in _request_wrapper
+    response = get_session().request(method=method, url=url, **params)
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 66, in send
+    return super().send(request, *args, **kwargs)
+  File "/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/requests/adapters.py", line 713, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: (ReadTimeoutError("HTTPSConnectionPool(host='cdn-lfs-us-1.hf-mirror.com', port=443): Read timed out. (read timeout=10)"), '(Request ID: 13f5108f-b311-4d31-99a6-1a6f88faae43)')
+nohup: ignoring input
+Fetching 34 files:   0%|          | 0/34 [00:00<?, ?it/s]Downloading 'model-00010-of-00017.safetensors' to '/home/share/chenhaoran/model_zoo/models--OpenGVLab--InternVL2-40B/blobs/681d56b93f433bddf6c852588c6434c9b4ef98d84ec52dc874b9ce4018eddc68.incomplete' (resume from 2998927360/4756460312)
