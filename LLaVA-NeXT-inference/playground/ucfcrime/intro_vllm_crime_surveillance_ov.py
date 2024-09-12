@@ -79,7 +79,7 @@ frames = image_processor.preprocess(video_frames, return_tensors="pt")["pixel_va
 image_tensors.append(frames)
 
 conv_template = "qwen_1_5"
-question = f"{DEFAULT_IMAGE_TOKEN}\nDescribe what's happening in this video."
+question = f"{DEFAULT_IMAGE_TOKEN}\nWe detected a crime act of abuse between people or people and animals in this video. Try to find it and describe the action."
 
 conv = copy.deepcopy(conv_templates[conv_template])
 conv.append_message(conv.roles[0], question)
@@ -101,3 +101,16 @@ cont = model.generate(
 )
 text_outputs = tokenizer.batch_decode(cont, skip_special_tokens=True)
 print(text_outputs[0])
+
+
+# Describe what's happening in this video.
+# The video takes place in a spacious, well-lit room with high ceilings and large windows. The room features a large painting on the wall behind a table, which is positioned on a gray carpeted area. A person wearing a light blue jacket and dark pants stands at the table, seemingly engaged in an activity that involves handling some papers or documents. Another individual, dressed in a black jacket and dark pants, enters the scene from the right side and approaches the table. This second person appears to be assisting or interacting with the first person, possibly discussing or organizing the items on the table. The background includes two closed doors and a staircase leading to an upper level.
+
+# As the scene continues, the person in the light blue jacket remains at the table, while the individual in the black jacket moves around the table, occasionally bending down as if picking up or placing items. The interaction between the two individuals suggests they are working together on the task at hand. The background remains consistent with the closed doors and staircase.
+
+# In the final part of the video, the person in the light blue jacket is now lying on the floor near the table, appearing to be in distress or discomfort. The individual in the black jacket is seen bending over the person on the floor, possibly checking on them or offering assistance. The background remains unchanged, with the closed doors and staircase still visible. The overall atmosphere of the video suggests a collaborative effort initially, followed by a moment of concern or assistance when one of the individuals falls to the ground.
+
+
+
+# We detected a crime act of abuse between people or people and animals in this video. Try to find it and describe the action.
+#视频开始时，一个人站在一个大而空的房间里的桌子后面，房间里有高高的天花板和拱形的门。此人身穿浅蓝色夹克和深色裤子。另一个人穿着黑色衣服从右侧进入画面。第二个人走近桌子，与桌子上的物品互动，导致纸张散落在地板上。第一个人在整个互动过程中保持静止。随着黑衣人继续与地板上散落的纸张互动，场景逐渐展开，而第一个人则留在桌子后面。故事继续进行，黑衣人仍在与地板上散落的纸张互动，而第一个人则留在桌子后面。视频的最后一部分显示，黑衣人跪在桌子旁边，似乎在整理或捡起散落的文件。第一个人站在桌子后面不动，观察情况。
