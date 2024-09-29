@@ -1,0 +1,3 @@
+CUDA extension not installed.
+CUDA extension not installed.
+slurmstepd: error: *** JOB 53482 ON dx-ai-node63 CANCELLED AT 2024-09-29T10:44:14 ***

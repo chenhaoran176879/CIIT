@@ -199,3 +199,7 @@ print(response)
 print('printed response')
 print(chat_history)
 print('printed chat_history')
+
+
+# 绕着桌子转了一圈，一度弯下腰。
+# 在视频中的八个物体中，这名女子穿着白色衬衫和黑色裤子，拿着一个黑色的小袋子。她站在图像的中心，周围有几个物体，包括一张棕色的木桌、两扇黑色门框的门、一幅木制门框的画和一个黑色的小袋子。

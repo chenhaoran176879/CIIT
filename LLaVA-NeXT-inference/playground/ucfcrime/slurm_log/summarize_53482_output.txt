@@ -1,0 +1,3 @@
+slurm_job_node_list: dx-ai-node63
+slurm_ntasks_per_node: 1
+已处理视频数量: 0

@@ -1,0 +1,28 @@
+Looking in indexes: https://pypi.tuna.tsinghua.edu.cn/simple
+Collecting transformers
+  Downloading https://pypi.tuna.tsinghua.edu.cn/packages/75/35/07c9879163b603f0e464b0f6e6e628a2340cfc7cdc5ca8e7d52d776710d4/transformers-4.44.2-py3-none-any.whl (9.5 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 9.5/9.5 MB 38.6 MB/s eta 0:00:00
+Requirement already satisfied: filelock in /mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages (from transformers) (3.15.4)
+Requirement already satisfied: huggingface-hub<1.0,>=0.23.2 in /mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages (from transformers) (0.24.3)
+Requirement already satisfied: numpy>=1.17 in /mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages (from transformers) (1.26.4)
+Requirement already satisfied: packaging>=20.0 in /mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages (from transformers) (24.1)
+Requirement already satisfied: pyyaml>=5.1 in /mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages (from transformers) (6.0.1)
+Requirement already satisfied: regex!=2019.12.17 in /mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages (from transformers) (2024.7.24)
+Requirement already satisfied: requests in /mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages (from transformers) (2.32.3)
+Requirement already satisfied: safetensors>=0.4.1 in /mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages (from transformers) (0.4.3)
+Collecting tokenizers<0.20,>=0.19 (from transformers)
+  Downloading https://pypi.tuna.tsinghua.edu.cn/packages/40/4f/eb78de4af3b17b589f43a369cbf0c3a7173f25c3d2cd93068852c07689aa/tokenizers-0.19.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.6 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.6/3.6 MB 49.1 MB/s eta 0:00:00
+Requirement already satisfied: tqdm>=4.27 in /mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages (from transformers) (4.66.4)
+Requirement already satisfied: fsspec>=2023.5.0 in /mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages (from huggingface-hub<1.0,>=0.23.2->transformers) (2023.10.0)
+Requirement already satisfied: typing-extensions>=3.7.4.3 in /mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages (from huggingface-hub<1.0,>=0.23.2->transformers) (4.12.2)
+Requirement already satisfied: charset-normalizer<4,>=2 in /mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages (from requests->transformers) (3.3.2)
+Requirement already satisfied: idna<4,>=2.5 in /mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages (from requests->transformers) (3.7)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages (from requests->transformers) (2.2.2)
+Requirement already satisfied: certifi>=2017.4.17 in /mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages (from requests->transformers) (2024.7.4)
+Installing collected packages: tokenizers, transformers
+  Attempting uninstall: tokenizers
+    Found existing installation: tokenizers 0.13.3
+    Uninstalling tokenizers-0.13.3:
+      Successfully uninstalled tokenizers-0.13.3
+Successfully installed tokenizers-0.19.1 transformers-4.44.2

@@ -133,16 +133,16 @@ def load_video(video_path, bound=None, input_size=448, max_num=1, num_segments=3
     return pixel_values, num_patches_list
 
 video_path = '/home/share/dataset/OpenDataLab___UCF-Crime/raw/UCF-Crime/Anomaly-Detection-Dataset/Anomaly-Videos-Part-1/Abuse/Abuse001_x264.mp4'
-pixel_values, num_patches_list = load_video(video_path, num_segments=8, max_num=1)
+pixel_values, num_patches_list = load_video(video_path, num_segments=32, max_num=1)
 pixel_values = pixel_values.to(torch.bfloat16).cuda()
 video_prefix = ''.join([f'Frame{i+1}: <image>\n' for i in range(len(num_patches_list))])
-question = video_prefix + 'We detected a crime act of abuse between people or people and animals in this video. Try to find it and describe the action.'
+question = video_prefix + 'We detected a crime act between people or people and animals in this video. Try to find it and describe the action.'
 # Frame1: <image>\nFrame2: <image>\n...\nFrame8: <image>\n{question}
 response, history = model.chat(tokenizer, pixel_values, question, generation_config,
                                num_patches_list=num_patches_list, history=None, return_history=True)
 print(f'User: {question}\nAssistant: {response}')
 
-question = 'Describe what the men are doing to the lady in detail. Try to determine whether this is an act of abuse.'
+question = 'Describe what the men are doing to the lady in detail. Try to determine whether this is an act of crime.'
 response, history = model.chat(tokenizer, pixel_values, question, generation_config,
                                num_patches_list=num_patches_list, history=history, return_history=True)
 print(f'User: {question}\nAssistant: {response}')
