@@ -1,6 +1,6 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from collections import defaultdict
-from video_summarization_prompt import video_summarization_prompt
+from video_summarization_prompt import video_summarization_prompt,video_summarization_prompt_normal
 
 import json
 
@@ -8,7 +8,7 @@ device = "cuda" # the device to load the model onto
 
 
 
-file_path = "/mnt/lustre/chenhaoran/datasets/UCF-Crime-Train/UCAtxt/UCFCrime_Train.txt"
+file_path = "/mnt/lustre/chenhaoran/datasets/UCF-Crime-Train/UCAtxt/UCFCrime_Val.txt"
 
 
 class UCADataset:
@@ -89,7 +89,7 @@ if __name__ == '__main__':
     tokenizer = AutoTokenizer.from_pretrained("/home/share/chenhaoran/model_zoo/Qwen1.5-72B-Chat-GPTQ-Int4/")
     device = model.device
 
-    output_file = '/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/slurm_log/LLM_summarization_results.jsonl'
+    output_file = '/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/slurm_log/LLM_summarization_results_val_normal.jsonl'
 
     processed_videos = load_processed_videos(output_file)
     print(f"已处理视频数量: {len(processed_videos)}")
@@ -104,7 +104,7 @@ if __name__ == '__main__':
                     print(f"Skipping already processed video: {video_name}")
                     continue
 
-                if video_name.lower().startswith('normal'):
+                if  not video_name.lower().startswith('normal'):
                     print(f"Skipping normal data at index {i}: {video_name}")
                     continue
 
@@ -112,7 +112,7 @@ if __name__ == '__main__':
 
                 messages = [
                     {"role": "system", "content": "You are a helpful assistant."},
-                    {"role": "user", "content": video_summarization_prompt.format(str(data))}
+                    {"role": "user", "content": video_summarization_prompt_normal.format(str(data))}
                 ]
 
                 print(f"Messages for index {i}: {messages}")

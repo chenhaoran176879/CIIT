@@ -89,8 +89,8 @@ def load_json(file_path):
 
 
 def remaining_chn2eng():
-    input_bilingual = "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/slurm_log/LLM_summarization_results.jsonl"
-    output_eng = "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/slurm_log/LLM_summarization_results_pure_eng.jsonl"
+    input_bilingual = "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/slurm_log/LLM_summarization_results_val.jsonl"
+    output_eng = "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/slurm_log/LLM_summarization_results_val_pure_eng.jsonl"
 
     dataset = load_json(input_bilingual)
     with open(output_eng, mode='w', newline='', encoding='utf-8') as outfile:
@@ -101,6 +101,6 @@ def remaining_chn2eng():
                 response = translate_chn2eng(response)
                 data['response'] = response
                 print(response)
-                outfile.write(json.dumps(data) + '\n')
+            outfile.write(json.dumps(data) + '\n')
 
 remaining_chn2eng()

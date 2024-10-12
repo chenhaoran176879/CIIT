@@ -1,0 +1,5 @@
+The `load_in_4bit` and `load_in_8bit` arguments are deprecated and will be removed in the future versions. Please, pass a `BitsAndBytesConfig` object in `quantization_config` argument instead.
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:03<00:09,  3.32s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:04<00:04,  2.29s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:06<00:01,  1.86s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:06<00:00,  1.30s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:06<00:00,  1.67s/it]
+Token indices sequence length is longer than the specified maximum sequence length for this model (8489 > 8192). Running this sequence through the model will result in indexing errors
+/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/bitsandbytes/autograd/_functions.py:322: UserWarning: MatMul8bitLt: inputs will be cast from torch.bfloat16 to float16 during quantization
+  warnings.warn(f"MatMul8bitLt: inputs will be cast from {A.dtype} to float16 during quantization")

@@ -1,0 +1,147 @@
+/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/huggingface_hub/file_download.py:1150: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+downloading  meta-llama/Meta-Llama-3-8B-Instruct
+loading model: /home/share/chenhaoran/model_zoo/lmms-lab--llava-onevision-qwen2-7b-ov
+loading llava
+Loaded LLaVA model: /home/share/chenhaoran/model_zoo/lmms-lab--llava-onevision-qwen2-7b-ov
+Loading vision tower: /home/share/models/siglip-so400m-patch14-384/
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:14<00:44, 14.89s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:29<00:29, 14.75s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:44<00:14, 14.86s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:48<00:00, 10.51s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:48<00:00, 12.09s/it]
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/huggingface_hub/file_download.py:1150: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Token indices sequence length is longer than the specified maximum sequence length for this model (8508 > 8192). Running this sequence through the model will result in indexing errors
+Setting `pad_token_id` to `eos_token_id`:151645 for open-end generation.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Model Class: LlavaQwenForCausalLM
+loading tokenizer
+/home/share/chenhaoran/model_zoo/lmms-lab--llava-onevision-qwen2-7b-ov Qwen2Tokenizer(name_or_path='/home/share/chenhaoran/model_zoo/lmms-lab--llava-onevision-qwen2-7b-ov', vocab_size=151643, model_max_length=32768, is_fast=False, padding_side='right', truncation_side='right', special_tokens={'eos_token': '<|im_end|>', 'pad_token': '<|endoftext|>', 'additional_special_tokens': ['<|im_start|>', '<|im_end|>']}, clean_up_tokenization_spaces=False),  added_tokens_decoder={
+	151643: AddedToken("<|endoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151644: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151645: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151646: AddedToken("<image>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+} /home/share/dataset/OpenDataLab___UCF-Crime/raw/UCF-Crime/Anomaly-Detection-Dataset/Anomaly-Videos-Part-1/Abuse/Abuse001_x264.mp4 <llava.model.multimodal_encoder.siglip_encoder.SigLipImageProcessor object at 0x2b5e02aad120>
+answer:
+ /home/share/chenhaoran/model_zoo/lmms-lab--llava-onevision-qwen2-7b-ov 
+ ['The video begins with a person standing behind a table in a large, empty room with high ceilings and arched doorways. The person is wearing a light blue shirt and dark pants. Another individual enters the frame from the right side, dressed in black clothing. This second person approaches the table and engages in an aggressive act, pushing the first person to the ground. The first person falls onto the floor, appearing to be in distress or pain. The second person then stands over the fallen individual, seemingly continuing the abusive behavior. The scene remains tense as the second person continues to stand over the fallen individual.\n\nThe narrative develops with the same setting and characters. The first person, still on the floor, appears to be in distress or pain. The second person, now wearing a white shirt and dark pants, enters the frame from the left side and approaches the first person. The second person kneels down next to the first person, seemingly trying to help or check on them. The first person remains on the floor, and the second person continues to kneel beside them, maintaining a supportive posture.\n\nThe video wraps up with the same setting and characters. The first person, still on the floor, appears to be in distress or pain. The second person, now wearing a white shirt and dark pants, enters the frame from the left side and approaches the first person. The second person kneels down next to the first person, seemingly trying to help or check on them. The first person remains on the floor, and the second person continues to kneel beside them, maintaining a supportive posture. The scene concludes with both individuals remaining in their positions, with the second person still kneeling beside the first person.']
+loading model: /home/share/chenhaoran/model_zoo/OpenGVLab--InternVideo2_Chat_8B_InternLM2_5
+downloading  internlm/internlm2_5-7b-chat-1m
+downloading  internlm/internlm2_5-7b-chat-1m
+downloading  internlm/internlm2_5-7b-chat-1m
+downloading  internlm/internlm2_5-7b-chat-1m
+Error loading model:(OpenGVLab--InternVideo2_Chat_8B_InternLM2_5)  cannot import name 'StaticCache' from 'transformers.cache_utils' (/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/transformers/cache_utils.py)
+loading model: /home/share/chenhaoran/model_zoo/OpenGVLab--InternVL2-1B
+loading tokenizer
+/home/share/chenhaoran/model_zoo/OpenGVLab--InternVL2-1B Qwen2Tokenizer(name_or_path='/home/share/chenhaoran/model_zoo/OpenGVLab--InternVL2-1B', vocab_size=151643, model_max_length=8192, is_fast=False, padding_side='right', truncation_side='right', special_tokens={'eos_token': '<|im_end|>', 'pad_token': '<|endoftext|>', 'additional_special_tokens': ['<|im_start|>', '<|im_end|>', '<img>', '</img>', '<IMG_CONTEXT>', '<quad>', '</quad>', '<ref>', '</ref>', '<box>', '</box>']}, clean_up_tokenization_spaces=False),  added_tokens_decoder={
+	151643: AddedToken("<|endoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151644: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151645: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151646: AddedToken("<img>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151647: AddedToken("</img>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151648: AddedToken("<IMG_CONTEXT>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151649: AddedToken("<quad>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151650: AddedToken("</quad>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151651: AddedToken("<ref>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151652: AddedToken("</ref>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151653: AddedToken("<box>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151654: AddedToken("</box>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+} /home/share/dataset/OpenDataLab___UCF-Crime/raw/UCF-Crime/Anomaly-Detection-Dataset/Anomaly-Videos-Part-1/Abuse/Abuse001_x264.mp4 None
+answer:
+ /home/share/chenhaoran/model_zoo/OpenGVLab--InternVL2-1B 
+ In the video, we can observe a scene where a man is standing in front of a desk, holding a book. There is another person, a woman, who appears to be running towards the man. The woman seems to be in a hurry, and she is running towards the desk where the man is standing. The man, who is holding the book, seems to be unaware of the woman's presence and continues to stand in front of the desk. The woman's actions suggest that she might be trying to get the attention of the man or perhaps to retrieve something from the desk. The overall scene appears to be a moment of tension or confusion between the two individuals.
+loading model: /home/share/chenhaoran/model_zoo/OpenGVLab--InternVL2-8B
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:23<01:10, 23.37s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:45<00:45, 22.87s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [01:15<00:25, 25.77s/it]Loading checkpoint shards: 100%|██████████| 4/4 [01:22<00:00, 18.36s/it]Loading checkpoint shards: 100%|██████████| 4/4 [01:22<00:00, 20.53s/it]
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Token indices sequence length is longer than the specified maximum sequence length for this model (8485 > 8192). Running this sequence through the model will result in indexing errors
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+loading tokenizer
+/home/share/chenhaoran/model_zoo/OpenGVLab--InternVL2-8B InternLM2Tokenizer(name_or_path='/home/share/chenhaoran/model_zoo/OpenGVLab--InternVL2-8B', vocab_size=92544, model_max_length=8192, is_fast=False, padding_side='right', truncation_side='right', special_tokens={'bos_token': '<s>', 'eos_token': '</s>', 'unk_token': '<unk>', 'pad_token': '</s>', 'additional_special_tokens': ['<|im_start|>', '<|im_end|>', '<|action_start|>', '<|action_end|>', '<|interpreter|>', '<|plugin|>', '<img>', '</img>', '<IMG_CONTEXT>', '<quad>', '</quad>', '<ref>', '</ref>', '<box>', '</box>']}, clean_up_tokenization_spaces=False),  added_tokens_decoder={
+	0: AddedToken("<unk>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	1: AddedToken("<s>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	2: AddedToken("</s>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92538: AddedToken("<|plugin|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92539: AddedToken("<|interpreter|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92540: AddedToken("<|action_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92541: AddedToken("<|action_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92542: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92543: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92544: AddedToken("<img>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92545: AddedToken("</img>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92546: AddedToken("<IMG_CONTEXT>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92547: AddedToken("<quad>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92548: AddedToken("</quad>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92549: AddedToken("<ref>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92550: AddedToken("</ref>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92551: AddedToken("<box>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92552: AddedToken("</box>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+} /home/share/dataset/OpenDataLab___UCF-Crime/raw/UCF-Crime/Anomaly-Detection-Dataset/Anomaly-Videos-Part-1/Abuse/Abuse001_x264.mp4 None
+answer:
+ /home/share/chenhaoran/model_zoo/OpenGVLab--InternVL2-8B 
+ In the video, a man is seen standing behind a desk in a room. Suddenly, another man rushes towards him and kicks him, causing him to fall to the ground. The man who was kicked then proceeds to punch the man who was standing behind the desk. The video captures the entire sequence of events, including the initial standing position of the man behind the desk, the sudden rush of the second man, the kick, the fall, and the subsequent punch. The video appears to be a recording of a physical altercation between the two men.
+loading model: /home/share/chenhaoran/model_zoo/OpenGVLab--InternVL2-26B
+Loading checkpoint shards:   0%|          | 0/11 [00:00<?, ?it/s]Loading checkpoint shards:   9%|▉         | 1/11 [00:23<03:56, 23.68s/it]Loading checkpoint shards:  18%|█▊        | 2/11 [00:46<03:29, 23.30s/it]Loading checkpoint shards:  27%|██▋       | 3/11 [01:04<02:47, 21.00s/it]Loading checkpoint shards:  36%|███▋      | 4/11 [01:29<02:37, 22.52s/it]Loading checkpoint shards:  45%|████▌     | 5/11 [01:49<02:08, 21.40s/it]Loading checkpoint shards:  55%|█████▍    | 6/11 [02:17<01:58, 23.75s/it]Loading checkpoint shards:  64%|██████▎   | 7/11 [02:41<01:35, 23.91s/it]Loading checkpoint shards:  73%|███████▎  | 8/11 [03:05<01:11, 23.73s/it]Loading checkpoint shards:  82%|████████▏ | 9/11 [03:34<00:51, 25.53s/it]Loading checkpoint shards:  91%|█████████ | 10/11 [04:00<00:25, 25.77s/it]Loading checkpoint shards: 100%|██████████| 11/11 [04:09<00:00, 20.41s/it]Loading checkpoint shards: 100%|██████████| 11/11 [04:09<00:00, 22.65s/it]
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Token indices sequence length is longer than the specified maximum sequence length for this model (8485 > 8192). Running this sequence through the model will result in indexing errors
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+loading tokenizer
+/home/share/chenhaoran/model_zoo/OpenGVLab--InternVL2-26B InternLM2Tokenizer(name_or_path='/home/share/chenhaoran/model_zoo/OpenGVLab--InternVL2-26B', vocab_size=92544, model_max_length=8192, is_fast=False, padding_side='right', truncation_side='right', special_tokens={'bos_token': '<s>', 'eos_token': '</s>', 'unk_token': '<unk>', 'pad_token': '</s>', 'additional_special_tokens': ['<img>', '</img>', '<IMG_CONTEXT>', '<quad>', '</quad>', '<ref>', '</ref>', '<box>', '</box>']}, clean_up_tokenization_spaces=False),  added_tokens_decoder={
+	0: AddedToken("<unk>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	1: AddedToken("<s>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	2: AddedToken("</s>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92538: AddedToken("<|plugin|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92539: AddedToken("<|interpreter|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92540: AddedToken("<|action_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92541: AddedToken("<|action_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92542: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92543: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92544: AddedToken("<img>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92545: AddedToken("</img>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92546: AddedToken("<IMG_CONTEXT>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92547: AddedToken("<quad>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92548: AddedToken("</quad>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92549: AddedToken("<ref>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92550: AddedToken("</ref>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92551: AddedToken("<box>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	92552: AddedToken("</box>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+} /home/share/dataset/OpenDataLab___UCF-Crime/raw/UCF-Crime/Anomaly-Detection-Dataset/Anomaly-Videos-Part-1/Abuse/Abuse001_x264.mp4 None
+answer:
+ /home/share/chenhaoran/model_zoo/OpenGVLab--InternVL2-26B 
+ In the video, there is a clear instance of a crime act involving two individuals. The scene unfolds in a room with a table in the center, and a woman is seen standing near the table. Suddenly, a man appears and attacks the woman, pushing her to the ground. The woman falls down, and the man continues to assault her. The attack is violent and aggressive, with the man using force to overpower the woman. The woman is clearly in distress, and the man's actions are a clear violation of her rights and safety. The video captures the entire sequence of events, from the initial attack to the woman being pushed to the ground. This is a clear example of a crime act, and the perpetrator should be held accountable for his actions.
+loading model: /home/share/chenhaoran/model_zoo/OpenGVLab--InternVL2-40B
+Loading checkpoint shards:   0%|          | 0/17 [00:00<?, ?it/s]Loading checkpoint shards:   6%|▌         | 1/17 [00:23<06:23, 23.94s/it]Loading checkpoint shards:  12%|█▏        | 2/17 [00:46<05:47, 23.16s/it]Loading checkpoint shards:  18%|█▊        | 3/17 [01:05<04:57, 21.22s/it]Loading checkpoint shards:  24%|██▎       | 4/17 [01:30<04:57, 22.89s/it]Loading checkpoint shards:  29%|██▉       | 5/17 [01:58<04:56, 24.71s/it]Loading checkpoint shards:  35%|███▌      | 6/17 [02:26<04:40, 25.54s/it]Loading checkpoint shards:  41%|████      | 7/17 [02:51<04:15, 25.57s/it]Loading checkpoint shards:  47%|████▋     | 8/17 [03:19<03:57, 26.34s/it]Loading checkpoint shards:  53%|█████▎    | 9/17 [03:46<03:33, 26.65s/it]Loading checkpoint shards:  59%|█████▉    | 10/17 [04:12<03:05, 26.43s/it]Loading checkpoint shards:  65%|██████▍   | 11/17 [04:41<02:42, 27.03s/it]Loading checkpoint shards:  71%|███████   | 12/17 [05:11<02:20, 28.07s/it]Loading checkpoint shards:  76%|███████▋  | 13/17 [05:41<01:54, 28.57s/it]Loading checkpoint shards:  82%|████████▏ | 14/17 [06:10<01:25, 28.64s/it]Loading checkpoint shards:  88%|████████▊ | 15/17 [06:35<00:54, 27.47s/it]Loading checkpoint shards:  94%|█████████▍| 16/17 [07:03<00:27, 27.71s/it]Loading checkpoint shards: 100%|██████████| 17/17 [07:18<00:00, 23.80s/it]Loading checkpoint shards: 100%|██████████| 17/17 [07:18<00:00, 25.76s/it]
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Token indices sequence length is longer than the specified maximum sequence length for this model (8508 > 8192). Running this sequence through the model will result in indexing errors
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+loading tokenizer
+/home/share/chenhaoran/model_zoo/OpenGVLab--InternVL2-40B LlamaTokenizer(name_or_path='/home/share/chenhaoran/model_zoo/OpenGVLab--InternVL2-40B', vocab_size=64000, model_max_length=8192, is_fast=False, padding_side='right', truncation_side='right', special_tokens={'bos_token': '<|startoftext|>', 'eos_token': '<|im_end|>', 'unk_token': '<unk>', 'pad_token': '<unk>', 'additional_special_tokens': ['<img>', '</img>', '<IMG_CONTEXT>', '<quad>', '</quad>', '<ref>', '</ref>', '<box>', '</box>']}, clean_up_tokenization_spaces=False),  added_tokens_decoder={
+	0: AddedToken("<unk>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	1: AddedToken("<|startoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	2: AddedToken("<|endoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	6: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	7: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	68: AddedToken("<img>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	70: AddedToken("</img>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	64000: AddedToken("<IMG_CONTEXT>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	64001: AddedToken("<quad>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	64002: AddedToken("</quad>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	64003: AddedToken("<ref>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	64004: AddedToken("</ref>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	64005: AddedToken("<box>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	64006: AddedToken("</box>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+} /home/share/dataset/OpenDataLab___UCF-Crime/raw/UCF-Crime/Anomaly-Detection-Dataset/Anomaly-Videos-Part-1/Abuse/Abuse001_x264.mp4 None
+answer:
+ /home/share/chenhaoran/model_zoo/OpenGVLab--InternVL2-40B 
+ In the video, a crime act is depicted where a person is seen pushing another person to the ground. The action occurs in a room with a wooden table and a chair. The person being pushed falls to the ground and appears to be in a vulnerable position. The person who pushed the other person then walks away, leaving the victim on the floor. This act of pushing someone to the ground can be considered a form of physical assault or violence.
+loading model: /home/share/chenhaoran/model_zoo/lmms-lab--llava-onevision-qwen2-72b-ov
+loading llava
+Loaded LLaVA model: /home/share/chenhaoran/model_zoo/lmms-lab--llava-onevision-qwen2-72b-ov
+Loading vision tower: /home/share/models/siglip-so400m-patch14-384/
+Loading checkpoint shards:   0%|          | 0/31 [00:00<?, ?it/s]Loading checkpoint shards:   3%|▎         | 1/31 [00:23<11:44, 23.48s/it]Loading checkpoint shards:   6%|▋         | 2/31 [00:50<12:15, 25.38s/it]Loading checkpoint shards:  10%|▉         | 3/31 [01:17<12:13, 26.21s/it]Loading checkpoint shards:  13%|█▎        | 4/31 [01:42<11:38, 25.86s/it]Loading checkpoint shards:  16%|█▌        | 5/31 [02:02<10:12, 23.55s/it]Loading checkpoint shards:  19%|█▉        | 6/31 [02:30<10:29, 25.17s/it]Loading checkpoint shards:  23%|██▎       | 7/31 [02:56<10:10, 25.42s/it]Loading checkpoint shards:  26%|██▌       | 8/31 [03:21<09:44, 25.41s/it]Loading checkpoint shards:  29%|██▉       | 9/31 [03:48<09:27, 25.80s/it]Loading checkpoint shards:  32%|███▏      | 10/31 [04:16<09:14, 26.42s/it]Loading checkpoint shards:  35%|███▌      | 11/31 [04:41<08:43, 26.20s/it]Loading checkpoint shards:  39%|███▊      | 12/31 [05:09<08:25, 26.63s/it]Loading checkpoint shards:  42%|████▏     | 13/31 [05:33<07:46, 25.91s/it]Loading checkpoint shards:  45%|████▌     | 14/31 [05:52<06:43, 23.76s/it]Loading checkpoint shards:  48%|████▊     | 15/31 [06:12<06:03, 22.71s/it]Loading checkpoint shards:  52%|█████▏    | 16/31 [06:32<05:26, 21.79s/it]Loading checkpoint shards:  55%|█████▍    | 17/31 [06:51<04:55, 21.08s/it]Loading checkpoint shards:  58%|█████▊    | 18/31 [07:12<04:30, 20.84s/it]Loading checkpoint shards:  61%|██████▏   | 19/31 [07:31<04:05, 20.42s/it]Loading checkpoint shards:  65%|██████▍   | 20/31 [07:49<03:35, 19.60s/it]Loading checkpoint shards:  68%|██████▊   | 21/31 [08:05<03:06, 18.69s/it]Loading checkpoint shards:  71%|███████   | 22/31 [08:25<02:49, 18.85s/it]Loading checkpoint shards:  74%|███████▍  | 23/31 [08:44<02:30, 18.85s/it]Loading checkpoint shards:  77%|███████▋  | 24/31 [09:00<02:07, 18.16s/it]Loading checkpoint shards:  81%|████████  | 25/31 [09:19<01:49, 18.25s/it]Loading checkpoint shards:  84%|████████▍ | 26/31 [09:46<01:44, 20.92s/it]Loading checkpoint shards:  87%|████████▋ | 27/31 [10:03<01:19, 19.92s/it]Loading checkpoint shards:  90%|█████████ | 28/31 [10:21<00:57, 19.32s/it]Loading checkpoint shards:  94%|█████████▎| 29/31 [10:41<00:38, 19.40s/it]Loading checkpoint shards:  97%|█████████▋| 30/31 [10:55<00:17, 17.84s/it]Loading checkpoint shards: 100%|██████████| 31/31 [11:05<00:00, 15.36s/it]Loading checkpoint shards: 100%|██████████| 31/31 [11:05<00:00, 21.45s/it]
+Some parameters are on the meta device because they were offloaded to the cpu.
+You shouldn't move a model that is dispatched using accelerate hooks.
+Model Class: LlavaQwenForCausalLM
+Error loading model:(lmms-lab--llava-onevision-qwen2-72b-ov)  You can't move a model that has some modules offloaded to cpu or disk.
+loading model: /home/share/chenhaoran/model_zoo/Qwen2-VL-7B-Instruct
+Error loading model:(Qwen2-VL-7B-Instruct)  name 'Qwen2VLForConditionalGeneration' is not defined

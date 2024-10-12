@@ -1,20 +1,25 @@
+video_path = "/home/share/dataset/OpenDataLab___UCF-Crime/raw/UCF-Crime/Anomaly-Detection-Dataset/Anomaly-Videos-Part-1/Abuse/Abuse001_x264.mp4"
+image_path = "/home/share/chenhaoran/datasets/visual_genome/VG_100K/10.jpg"
+model_path = '/home/share/chenhaoran/model_zoo/models--OpenGVLab--InternVideo2_Chat_8B_InternLM2_5/snapshots/de18473033b9aa716fa6d391a2cc7c2881f72253/'
+
+
+
 import os
 import torch
 
 from transformers import AutoTokenizer, AutoModel
 
-path = '/home/share/chenhaoran/model_zoo/models--OpenGVLab--InternVideo2_Chat_8B_InternLM2_5/snapshots/de18473033b9aa716fa6d391a2cc7c2881f72253/'
-tokenizer =  AutoTokenizer.from_pretrained(path,
+tokenizer =  AutoTokenizer.from_pretrained(model_path,
     trust_remote_code=True,
     use_fast=False,)
 if torch.cuda.is_available():
   model = AutoModel.from_pretrained(
-      path,
+     model_path,
       torch_dtype=torch.bfloat16,
       trust_remote_code=True).cuda()
 else:
   model = AutoModel.from_pretrained(
-      path,
+      model_path,
       torch_dtype=torch.bfloat16,
       trust_remote_code=True)
 
@@ -177,28 +182,13 @@ def HD_transform_no_padding(frames, image_size=224, hd_num=6, fix_ratio=(2,1)):
     )
     return resized_frame
 
-video_path = "/home/share/dataset/OpenDataLab___UCF-Crime/raw/UCF-Crime/Anomaly-Detection-Dataset/Anomaly-Videos-Part-1/Abuse/Abuse001_x264.mp4"
-image_path = "/home/share/chenhaoran/datasets/visual_genome/VG_100K/10.jpg"
 # sample uniformly 8 frames from the video
 video_tensor = load_video(video_path, num_segments=8, return_msg=False, resolution=224, hd_num=6)
 video_tensor = video_tensor.to(model.device)
 
-print('video_tensor',video_tensor)
 chat_history = []
-
-print('start inference')
-response, chat_history = model.chat(tokenizer, '', 
-                                    'Describe the video step by step',
-                                    instruction= "Carefully watch the video and pay attention to the cause and sequence of events, the detail and movement of objects, and the action and pose of persons. Based on your observations, select the best option that accurately addresses the question.\n",
-                                      media_type='video', 
-                                      media_tensor=video_tensor, 
-                                      chat_history= chat_history, 
-                                      return_history=True,
-                                      generation_config={'do_sample':True,'max_new_tokens':512,})
+response, chat_history = model.chat(tokenizer, '', 'Describe the video step by step',instruction= "Carefully watch the video and pay attention to the cause and sequence of events, the detail and movement of objects, and the action and pose of persons. Based on your observations, select the best option that accurately addresses the question.\n", media_type='video', media_tensor=video_tensor, chat_history= chat_history, return_history=True,generation_config={'do_sample':False,'max_new_tokens':512,})
 print(response)
-print('printed response')
-print(chat_history)
-print('printed chat_history')
 
 
 # 绕着桌子转了一圈，一度弯下腰。

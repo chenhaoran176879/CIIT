@@ -1,0 +1,5 @@
+CUDA extension not installed.
+CUDA extension not installed.
+/mnt/lustre/chenhaoran/anaconda3/envs/llava-interleave/lib/python3.10/site-packages/transformers/modeling_utils.py:4728: FutureWarning: `_is_quantized_training_enabled` is going to be deprecated in transformers 4.39.0. Please use `model.hf_quantizer.is_trainable` instead
+  warnings.warn(
+Loading checkpoint shards:   0%|          | 0/11 [00:00<?, ?it/s]Loading checkpoint shards:   9%|▉         | 1/11 [00:12<02:05, 12.57s/it]Loading checkpoint shards:  18%|█▊        | 2/11 [00:28<02:12, 14.73s/it]Loading checkpoint shards:  27%|██▋       | 3/11 [00:44<02:00, 15.09s/it]Loading checkpoint shards:  36%|███▋      | 4/11 [00:58<01:41, 14.54s/it]Loading checkpoint shards:  45%|████▌     | 5/11 [01:13<01:29, 14.98s/it]Loading checkpoint shards:  55%|█████▍    | 6/11 [01:29<01:16, 15.25s/it]Loading checkpoint shards:  64%|██████▎   | 7/11 [01:44<01:00, 15.09s/it]Loading checkpoint shards:  73%|███████▎  | 8/11 [01:55<00:41, 13.96s/it]Loading checkpoint shards:  82%|████████▏ | 9/11 [02:18<00:33, 16.74s/it]

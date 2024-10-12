@@ -1,0 +1,249 @@
+slurm_job_node_list: dx-ai-node68
+slurm_ntasks_per_node: 1
+Selected questions: anomaly_detection_question, crime_classification_question, event_description_question, event_description_with_classification
+loading tokenizer
+Output file not found: /mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/benchmark_results/eval_results_qwen-vl2-72B_32frames.jsonl
+Starting evaluation for model qwen-vl2-72B from index: 0
+Processing index: 0, video name: Abuse037_x264.mp4
+  Question: anomaly_detection_question
+generation complete
+  Answer for 'anomaly_detection_question': No. The video does not show any signs of crime or danger.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ['RoadAccidents']
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video shows a snowy parking lot with several cars parked. A white car drives through the lot, and a dog runs in front of it. The dog then runs back and forth in the snow. The video appears to be normal and does not contain any abnormal events.
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': The abnormal event is 'a car drives through a parking lot'.
+Processing index: 1, video name: Abuse038_x264.mp4
+  Question: anomaly_detection_question
+generation complete
+  Answer for 'anomaly_detection_question': Yes. The reason is that a car is seen crashing into a person on the sidewalk.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ['RoadAccidents']
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video contains an abnormal event. A car is seen driving towards the group of people on the sidewalk, and it suddenly stops. The car then reverses and drives away.
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': An abnormal event is that a car hit a person.
+Processing index: 2, video name: Abuse039_x264.mp4
+  Question: anomaly_detection_question
+generation complete
+  Answer for 'anomaly_detection_question': Yes. The reason is that the man is being dragged out of the room by the officers.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ["Assault"]
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video contains abnormal events. The events include a man and a woman walking through a hallway, a man in a uniform approaching them, and the man in the uniform pushing the woman to the ground. Another man in a uniform then joins in and they both start to fight with the woman.
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': The abnormal event is 'A man is seen running towards the camera'.
+Processing index: 3, video name: Abuse040_x264.mp4
+  Question: anomaly_detection_question
+generation complete
+  Answer for 'anomaly_detection_question': Yes. The man is helping the woman walk with a walker, which might indicate that she has difficulty walking on her own.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ["Abuse"]
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video depicts a man helping an elderly woman walk in a living room. The man is seen pushing the woman in a walker, and they both move around the room together. The living room is furnished with a couch, chairs, and a coffee table. There is also a painting on the wall and a ceiling fan. The man and woman appear to be engaged in a conversation as they walk.
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': The abnormal event is 'a man pushes a woman in a walker'.
+Processing index: 4, video name: Abuse041_x264.mp4
+  Question: anomaly_detection_question
+generation complete
+  Answer for 'anomaly_detection_question': No. The video shows a teacher and children in a classroom setting, with no indication of any criminal or dangerous activity.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ['Abuse']
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video shows a group of children sitting at tables in a classroom. A woman enters the room and begins to walk around the room, picking up the children one by one and placing them on the floor. The woman then walks around the room again, picking up the children and placing them on the floor. The children are sitting at tables with plates in front of them. The room has a colorful wall with various pictures and decorations. The woman is wearing a pink shirt and black pants. The children are wearing different colored clothes. The video appears to be a recording of a classroom setting, possibly a kindergarten or daycare.
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': The abnormal event is "a child is walking on the table".
+Processing index: 5, video name: Abuse042_x264.mp4
+  Question: anomaly_detection_question
+generation complete
+  Answer for 'anomaly_detection_question': No. The video does not show any signs of crime or danger.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ["Abuse"]
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video contains normal events. 
+
+In the video, a woman is seen changing a baby's diaper on a bed. The baby is lying on its back, and the woman is kneeling beside it. She is wearing a red dress and is changing the baby's diaper. The bed has a pink and white bedspread, and there is a white crib next to it. The woman is seen picking up the baby's diaper and throwing it away.
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': The abnormal event is "a woman in a red shirt is changing a baby's diaper".
+Processing index: 6, video name: Arrest043_x264.mp4
+  Question: anomaly_detection_question
+generation complete
+  Answer for 'anomaly_detection_question': Yes. The reason is that one of the men is lying on the ground, which could indicate an injury or an accident.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ["Assault"]
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video shows a group of people working together to move a car. They are seen pushing the car while others watch. The car is then moved to a different location.
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': The abnormal event is 'a man is lying on the ground'.
+Processing index: 7, video name: Arrest044_x264.mp4
+  Question: anomaly_detection_question
+generation complete
+  Answer for 'anomaly_detection_question': Yes. The video shows a burglary in progress, which is an abnormal event related to crime and danger.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ['Burglary']
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video shows a burglary in a house. The burglars are seen entering the house and stealing items. The homeowner is then shown confronting the burglars and calling the police. The police arrive and arrest the burglars. The video ends with the police officers leaving the scene.
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': The abnormal event is "two men run out of a house". The environment is a living room with a TV, couch, and chairs. The two men are wearing green shirts and black pants. One of them is carrying a backpack. The video shows a fast-forward effect, indicating that the event is being replayed.
+Processing index: 8, video name: Arrest046_x264.mp4
+  Question: anomaly_detection_question
+generation complete
+  Answer for 'anomaly_detection_question': Yes. The man being searched is being searched by two police officers, which could be related to crime or danger.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ["Assault"]
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video contains abnormal events. The man is being restrained by two officers, and he is being forced to the ground.
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': The abnormal event is 'A man is being searched by two police officers'.
+Processing index: 9, video name: Arrest048_x264.mp4
+  Question: anomaly_detection_question
+generation complete
+  Answer for 'anomaly_detection_question': Yes. The reason is that there is a fight between two men in the video.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ["Assault"]
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video contains abnormal events. The man in the red shirt is seen walking into a convenience store, and then he is suddenly attacked by another man who is wearing a black shirt. The man in the black shirt is seen punching and kicking the man in the red shirt, and then he is tackled to the ground by two police officers. The police officers are seen handcuffing the man in the black shirt and taking him away.
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': The abnormal event is 'a man in a red shirt is being attacked by a man in a blue shirt'.
+Processing index: 10, video name: Arrest049_x264.mp4
+  Question: anomaly_detection_question
+generation complete
+  Answer for 'anomaly_detection_question': Yes. The video shows a man being arrested by the police.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ['Arrest']
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video contains abnormal events. The events include a man being arrested by police officers, who then load him into a police van.
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': The abnormal event is 'a man is being arrested'.
+Processing index: 11, video name: Arrest050_x264.mp4
+  Question: anomaly_detection_question
+generation complete
+  Answer for 'anomaly_detection_question': Yes. The reason is that there are police cars with lights on and people standing around them.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ['RoadAccidents']
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video shows a car accident at an intersection.
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': The abnormal event is 'a car is driving the wrong way'.
+Processing index: 12, video name: Arrest051_x264.mp4
+  Question: anomaly_detection_question
+generation complete
+  Answer for 'anomaly_detection_question': No. The video does not show any signs of crime or danger.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ['RoadAccidents']
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video contains normal events. 
+
+The video shows a busy city street at night with people walking around and cars driving by. There are several people walking around the street, and a man is seen riding a skateboard. A white van is also seen driving by.
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': The abnormal event is "a person is skateboarding in the middle of the road".
+Processing index: 13, video name: Arson020_x264.mp4
+  Question: anomaly_detection_question
+generation complete
+  Answer for 'anomaly_detection_question': Yes. The reason is that a person is seen running towards the parked car and then getting inside the car.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ['Robbery']
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video contains abnormal events. The abnormal event is that a man jumps out of a car and runs towards the parked car.
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': The abnormal event is 'a car pulls up next to a white car'.
+Processing index: 14, video name: Arson021_x264.mp4
+  Question: anomaly_detection_question
+generation complete
+  Answer for 'anomaly_detection_question': Yes. The person on the bike might be a suspect of a crime.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ['RoadAccidents']
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video shows a man riding a bike down a street. He then turns left onto another street.
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': The abnormal event is 'a car passes by'.
+Processing index: 15, video name: Arson022_x264.mp4
+  Question: anomaly_detection_question
+generation complete
+  Answer for 'anomaly_detection_question': Yes. The man in the video is seen opening the door and entering the room, which could potentially be a crime scene or a dangerous situation.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ['Burglary']
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video shows a man entering a room and walking towards a Christmas tree. He then turns off the lights and leaves the room. The video appears to be a normal event with no abnormal activities detected. The environment is a room with a Christmas tree, shelves, and a chair. The man is wearing a black jacket and blue jeans.
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': The abnormal event is "the door closes". 
+
+Details: The video shows a man entering a room and walking towards a Christmas tree. He then turns around and walks back towards the door. Suddenly, the door closes, trapping the man inside the room. The room is decorated with Christmas decorations, including a Christmas tree, wreaths, and garlands. The man is wearing a dark-colored outfit and appears to be in his mid-twenties. The video is recorded in a security camera, and the footage is in black and white.
+Processing index: 16, video name: Arson023_x264.mp4
+  Question: anomaly_detection_question
+generation complete
+  Answer for 'anomaly_detection_question': Yes. The person in the video is seen pouring a liquid onto the car and then setting fire to it. This could be related to arson or vandalism.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ['Robbery']
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video contains abnormal events. The events in the video are as follows: a person wearing a white hoodie and white pants is seen walking towards a car. The person then pours a liquid from a blue container onto the car's windshield and hood. The person then walks away from the car.
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': The abnormal event is 'car is hit by object'.
+Processing index: 17, video name: Arson024_x264.mp4
+  Question: anomaly_detection_question
+generation complete
+  Answer for 'anomaly_detection_question': Yes. The explosion in the room could be related to a crime or danger.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ['Explosion']
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video contains abnormal events. The abnormal event is that a fire starts in the room.
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': The abnormal event is "explosion".
+Processing index: 18, video name: Arson025_x264.mp4
+  Question: anomaly_detection_question
+generation complete
