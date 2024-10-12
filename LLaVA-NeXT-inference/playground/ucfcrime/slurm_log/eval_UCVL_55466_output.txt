@@ -247,3 +247,83 @@ generation complete
 Processing index: 18, video name: Arson025_x264.mp4
   Question: anomaly_detection_question
 generation complete
+  Answer for 'anomaly_detection_question': No. The video shows a car on fire, which is an accident, but there is no indication of crime or danger.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ['RoadAccidents']
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video shows a car on fire with smoke coming out of it. A man in a white shirt and black pants is walking towards the car. A fire truck arrives at the scene.
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': An event of car on fire happens in this video.
+The video shows a car on fire with smoke coming out of it. There are several people walking around the car and a fire truck arrives on the scene.
+Processing index: 19, video name: Arson026_x264.mp4
+  Question: anomaly_detection_question
+generation complete
+  Answer for 'anomaly_detection_question': Yes. The video shows a group of people running out of a building, which could be related to an emergency or a crime.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ['Robbery']
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video shows a group of people running through a store, causing a commotion. The people are seen running in and out of the store, with some carrying items. The store appears to be in disarray, with shelves and items scattered around. The people are wearing casual clothing, and the store has a bright light. The video seems to capture a chaotic scene, with people running in and out of the store, possibly in a hurry or in response to an emergency.
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': The abnormal event is 'the people in the store start to panic'.
+Processing index: 20, video name: Arson027_x264.mp4
+  Question: anomaly_detection_question
+generation complete
+  Answer for 'anomaly_detection_question': Yes. The man in the white shirt appears to be setting fire to the car, which is an abnormal event that might be related to crime or danger.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ['Explosion']
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video contains abnormal events. The first event shows a man in a white shirt and blue jeans walking into a garage and lighting a fire in a grill. The second event shows a man in a black shirt and blue jeans walking into a garage and lighting a fire in a grill. The third event shows a man in a white shirt and blue jeans walking into a garage and lighting a fire in a grill. The fourth event shows a man in a white shirt and blue jeans walking into a garage and lighting a fire in a grill. The fifth event shows a man in a white shirt and blue jeans walking into a garage and lighting a fire in
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': The abnormal event is 'a man in a white shirt is seen walking around a table and then walking towards a car'.
+Processing index: 21, video name: Arson028_x264.mp4
+  Question: anomaly_detection_question
+generation complete
+  Answer for 'anomaly_detection_question': Yes. The person in the white shirt is seen running towards the parked car, which could be related to crime or danger.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ['Robbery']
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video contains abnormal events. The events include a car driving into a building, a person running out of the building, and a person running down the street.
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': The abnormal event is 'a car drives away from the house'.
+Processing index: 22, video name: Arson029_x264.mp4
+  Question: anomaly_detection_question
+generation complete
+  Answer for 'anomaly_detection_question': Yes. The man in the video is seen running away from the bus, which could be related to an escape from a dangerous situation or a crime.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ["Assault"]
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video shows a man walking down the aisle of a bus, sitting down, and then getting up and walking away.
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': An abnormal event is that a man is seen walking down the aisle of a bus and then suddenly starts running.
+Processing index: 23, video name: Arson030_x264.mp4
+  Question: anomaly_detection_question
+generation complete
+  Answer for 'anomaly_detection_question': Yes. The video shows a person walking on the street at night, and a car suddenly appearing and hitting the person. This could be related to a crime or danger.
+  Question: crime_classification_question
+generation complete
+  Answer for 'crime_classification_question': ['Robbery']
+  Question: event_description_question
+generation complete
+  Answer for 'event_description_question': The video contains normal events. 
+
+The video shows a man walking down the street at night. He is wearing a white shirt and black pants. A motorcycle passes him, and a car follows shortly after. The street is empty, and there are no other people or vehicles visible in the video.
+  Question: event_description_with_classification
+generation complete
+  Answer for 'event_description_with_classification': The abnormal event is "a car is driving down the road".
+Processing index: 24, video name: Arson031_x264.mp4
+  Question: anomaly_detection_question
