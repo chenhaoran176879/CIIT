@@ -3,8 +3,7 @@ import openai
 from openai import OpenAI
 import csv
 import os
-import logging
-from bench_hierarchical_questioning_detailed import  eval_event_description_prompt,eval_event_description_with_classification_prompt
+from bench_hierarchical_questioning import  eval_event_description_prompt,eval_event_description_with_classification_prompt
 import json
 from copy import deepcopy
 import argparse
@@ -26,7 +25,7 @@ def convert_response_to_numeric(value):
                 number += char  # 拼接数字字符
             elif number:  # 如果已经开始拼接数字且遇到非数字字符
                 break
-        logger.info(f"response is expected to be number, but got {value}. Force convert to {number}")
+        print(f"response is expected to be number, but got {value}. Force convert to {number}")
         return int(number)
     
 class OpenAIChatBot:
@@ -83,12 +82,9 @@ class UCVLAnswerDataset:
         return len(self.data)
     
 
-
     def __getitem__(self, index):
         answers = self.data[index]
         video_name = answers['video_name']
-        if '.' not in video_name:
-            video_name+='.mp4'
         gt = self.ground_truth[video_name]
 
         return {
@@ -133,35 +129,22 @@ def calculate_averages(data_list):
 
     # 计算所有字段的总平均值
     total_sum = sum(averages.values())
-    # total_fields = len(averages)
-    # overall_average = total_sum / total_fields if total_fields > 0 else 0
+    total_fields = len(averages)
+    overall_average = total_sum / total_fields if total_fields > 0 else 0
 
     # 将总平均值添加到字典中
-    averages['average_sum'] = total_sum
+    averages['overall_average'] = overall_average
 
     return averages
 
 
 def sum_score(scores:dict)->float:
     return (
-    10 *  (scores.get('multiple_choice_question_1',0)>0) +
-    10 *  (scores.get('multiple_choice_question_2',0)>0) +
-    10 *  (scores.get('multiple_choice_question_3',0)>0) +
-    10 *  (scores.get('multiple_choice_question_4',0)>0) +
-    10 *  (scores.get('multiple_choice_question_5',0)>0) +
-    40 *  (scores.get('anomaly_detection_question',0)>0) +
-    20 * (scores.get('crime_classification_question',0)>0) + # bonus
+    30 *  (scores.get('anomaly_detection_question',0)>0) +
+    30 * (scores.get('crime_classification_question',0)>0) + # bonus
     30 * (scores.get('event_description_question',0)/100) +
-    30 * (scores.get('event_description_with_classification',0)/100))
+    40 * (scores.get('event_description_with_classification',0)/100))
 
-def extract_ABCD(text):
-    if ':' in text:
-        text = text.split(':')[0]
-    
-    if '.' in text:
-        text = text.split('.')[0]
-    text = text.lower().strip()
-    return text 
 
 def UCVL_scoring(args):
     save_score_path = args.save_score_path
@@ -170,87 +153,60 @@ def UCVL_scoring(args):
     model_answer_dataset = UCVLAnswerDataset(
         answer_path=args.answer_path,
         ground_truth_path=args.ground_truth_path)
-    start_index,final_scores = load_last_json_index(save_score_path,collect_scores = True)
-    print('continue from index',start_index)
+    start_index = load_last_json_index(save_score_path)+1
     f =  open(save_score_path,'a',encoding='utf-8')
-    #final_scores = []
+    final_scores = []
     for idx in range(start_index, len(model_answer_dataset)):
         answer_sheet = model_answer_dataset[idx]
         if model_name == None: model_name = answer_sheet['model_answer']['model_name']
         scores = {}
-        ground_truth_description= answer_sheet['ground_truth']['description']
-        detection_score = 100
-        result = deepcopy(answer_sheet["model_answer"])
-        logger.info(f"视频名称：{answer_sheet['model_answer']['video_name']}")
         for question_name,model_answer in answer_sheet['model_answer']['answer'].items():
             eval_prompt_format = model_answer_dataset.eval_prompts.get(question_name,None)
-            if isinstance(model_answer, list) and len(model_answer) == 1 : model_answer = model_answer[0]
             if eval_prompt_format:
-                eval_prompt = eval_prompt_format.format(ground_truth_description,model_answer)
+                eval_prompt = eval_prompt_format.format(answer_sheet['ground_truth']['description'],model_answer)
                 score = client.chat(eval_prompt)
                 score = convert_response_to_numeric(score)
                 scores[question_name] = score
-
-                logger.info(f"{answer_sheet['model_answer']['video_name']}主观题问题: {eval_prompt}")
-                logger.info(f"{answer_sheet['model_answer']['video_name']}主观题得分: {score}")
+                
+                print(f"问题: {question_name}")
+                print(f"模型回答: {model_answer}")
+                print(f"ground truth: 分类{answer_sheet['model_answer']['video_name']}, \n ground truth:描述{answer_sheet['ground_truth']['description']}")
+                print(f"得分: {score}")
 
             elif question_name == "anomaly_detection_question":
-                detection_score = 100
+                score = 100
                 prefix = model_answer[:min(len(model_answer),5)]
                 gt = None
                 if 'normal' in  answer_sheet['ground_truth']['video_name'].lower():
                     gt = 0
                 else: gt = 1
+
                 if 'yes' in prefix.lower():
-                    detection_score *= gt
+                    score *= gt
 
                 elif 'no' in prefix.lower():
-                    detection_score *= (1-gt)
+                    score *= (1-gt)
 
                 elif 'yes' in model_answer.lower() and 'no' not in model_answer.lower():
-                    detection_score *= gt
+                    score *= gt
                 elif 'yes' not in model_answer.lower() and 'no' in model_answer.lower():
-                    detection_score *= gt
+                    score *= gt
                 
                 else:
-                    detection_score = 0
+                    score = 0
             
-                scores[question_name] = detection_score
-                logger.info(f"{answer_sheet['model_answer']['video_name']}异常检测题： 回答{model_answer} 标准答案{bool(gt)}")
+                scores[question_name] = score
 
             elif question_name == "crime_classification_question":
-                classification_score = 0
-                if 'normal' in  answer_sheet['ground_truth']['video_name'].lower():
-                    classification_score = detection_score
+                score = 0
                 if get_category(answer_sheet['ground_truth']['video_name']).lower() in model_answer.lower():
-                    classification_score = detection_score
-                scores[question_name] = classification_score
-                logger.info(f"{answer_sheet['model_answer']['video_name']}分类题： 回答{model_answer} 标准答案{get_category(answer_sheet['ground_truth']['video_name']).lower()}")
+                    score = 100
+                scores[question_name] = score
 
-            elif "multiple_choice_question" in question_name:
-                question_index = str(question_name[-1])
-                MCQ_gt_dict =  answer_sheet['ground_truth']['multiple_choice_questions']
-                MCQ_gt = MCQ_gt_dict[question_index]['ground_truth']
-                result[f'ground_truth_{question_name}'] = MCQ_gt
-                if MCQ_gt.lower()==extract_ABCD(model_answer):
-                    scores[question_name] = 100
-                else:
-                    scores[question_name] = 0
-
-                logger.info(f"{answer_sheet['model_answer']['video_name']}选择题：\n \
-                问题{MCQ_gt_dict[question_index]['question']}\n \
-                A. {MCQ_gt_dict[question_index]['options']['A']}  \n \
-                B. {MCQ_gt_dict[question_index]['options']['B']}  \n \
-                C. {MCQ_gt_dict[question_index]['options']['C']}  \n \
-                D. {MCQ_gt_dict[question_index]['options']['D']}  \n \
-                回答{model_answer}   标准答案{extract_ABCD(model_answer)}")
-
-
-        
-        result['ground_truth_description'] = ground_truth_description            
+        result = deepcopy(answer_sheet["model_answer"])
         result['scores'] =scores
         score_sum = sum_score(scores)
-        logger.info(f"本视频最终得分: {score_sum}/170")
+        print(f"本视频最终平均得分: {score_sum}")
         result['sum'] = score_sum
         scores['sum'] = score_sum
         final_scores.append(scores)
@@ -260,28 +216,13 @@ def UCVL_scoring(args):
     averages = calculate_averages(final_scores)
     averages['model_name'] = model_name
     averages['openai_model'] = client.model_type
-    logger.info("Averages:\n",averages)
+    print("Averages:\n",averages)
     if model_name:
         f.write(json.dumps(averages, ensure_ascii=False) + '\n')
     f.close()
           
     return
 
-logger = None
-
-def setup_logger(log_file, level=logging.INFO):
-    """Function to set up the global logger"""
-    global logger  # 使用全局 logger 变量
-    handler = logging.FileHandler(log_file)        
-    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-    handler.setFormatter(formatter)
-
-    logger = logging.getLogger('main_logger')  # 给全局 logger 一个名称
-    logger.setLevel(level)
-    logger.addHandler(handler)
-    
-    if not logger.handlers:
-        logger.addHandler(handler)
 
 
 if __name__ == "__main__":
@@ -289,45 +230,25 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Process evaluation paths.')
     parser.add_argument('--save_score_path', type=str, default=None, help='Path to save the score results')
     parser.add_argument('--answer_path', type=str, default=None, help='Path to the model answer JSONL file')
-    #parser.add_argument('--MCQ_answer_path', type=str, default=None, help='Path to the model MCQ answer JSONL file'))
     parser.add_argument('--ground_truth_path', type=str, default=None, help='Path to the ground truth JSONL file')
 
     args = parser.parse_args()
 
     answer_paths = [
-    "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_qwen-vl2-72B_32frames_merge.jsonl",
-    "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_Qwen2-VL-7B-Instruct_32frames_merge.jsonl",
-    "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_qwen-vl2-2B_32frames_merge.jsonl",
-    "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_lmms-lab--llava-onevision-qwen2-7b-ov_32frames_merge.jsonl",
-    "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_OpenGVLab--InternVL2-1B_32frames_merge.jsonl",
-    "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_OpenGVLab--InternVL2-8B_32frames_merge.jsonl",
-    "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_OpenGVLab--InternVL2-26B_32frames_merge.jsonl",
-    "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_OpenGVLab--InternVL2-40B_32frames_merge.jsonl",
+        "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/benchmark_results/eval_results_Qwen2-VL-7B-Instruct_32frames_1013.jsonl",
+        "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/benchmark_results/eval_results_OpenGVLab--InternVL2-1B_32frames_1013.jsonl",
+        "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/benchmark_results/eval_results_qwen-vl2-72B_32frames_1013.jsonl",
+        "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/benchmark_results/eval_results_OpenGVLab--InternVL2-40B_32frames_1013.jsonl",
+        "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/benchmark_results/eval_results_qwen-vl2-2B_32frames_1013.jsonl",
+        "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/benchmark_results/eval_results_lmms-lab--llava-onevision-qwen2-7b-ov_32frames_1013.jsonl",
+        "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/benchmark_results/eval_results_OpenGVLab--InternVL2-1B_32frames_1013.jsonl",
+        
     ]
 
-    args.ground_truth_path = "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/UCVL_gt_with_test_mcq.jsonl"
-
-    # 新的结果保存路径
-    save_dir = "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/benchmark_results/"
-    log_dir = save_dir
+    args.ground_truth_path = "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/slurm_log/LLM_summarization_results_combined.jsonl"
     for answer_path in answer_paths:
         args.answer_path = answer_path
-        # 只取文件名部分，并替换路径为新的结果目录
-        base_filename = os.path.basename(answer_path).split('.')[0]
-        log_filename = os.path.join(log_dir, base_filename + '.log')
-        args.save_score_path = os.path.join(save_dir, base_filename + '_score_1018.jsonl')
-
-        setup_logger(log_filename)
-
-        # 打印和记录输出
-        print(f"Processing {answer_path}")
-        logger.info(f"Processing {answer_path}")
+        args.save_score_path = answer_path.split('.')[0]+'_score.jsonl'
         print(args)
-        logger.info(args)
-
-
         UCVL_scoring(args)
-
-        logger.info('\n\n\n\n\n\n\n\n')
-
-# python -u /mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/bench_score_by_openai.py >> /mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_lmms-lab--llava-onevision-qwen2-7b-ov_32frames_score_1016.log 2>&1 &
+        exit(0)

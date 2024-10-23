@@ -4,7 +4,7 @@ import torch
 import os
 import copy
 
-from bench_hierarchical_questioning import anomaly_detection_question,event_description_question,crime_classification_question,temporal_grounding_question,event_description_with_classification
+from bench_hierarchical_questioning_detailed import anomaly_detection_question,event_description_question,crime_classification_question,temporal_grounding_question,event_description_with_classification,multiple_choice_question
 class UCVLDataset(torch.utils.data.Dataset):
     # UCVL: UCF-Crime for Video Language models
     def __init__(self, json_root, video_folder,questions,split='train'):
@@ -19,9 +19,10 @@ class UCVLDataset(torch.utils.data.Dataset):
             'event_description_question': event_description_question,
             'crime_classification_question': crime_classification_question,
             'event_description_with_classification':event_description_with_classification,
-            'temporal_grounding_question': temporal_grounding_question
+            'temporal_grounding_question': temporal_grounding_question,
+            'multiple_choice_question':multiple_choice_question
         }
-
+        
         # 根据用户选择的 questions 构建 bench_questions
         if questions is None:
             questions = all_questions.keys()  # 默认选择所有问题
@@ -76,13 +77,26 @@ class UCVLDataset(torch.utils.data.Dataset):
         if 'temporal_grounding_question' in bench_questions:
             classification = self.get_category(data['video_name'])
             bench_questions['temporal_grounding_question'] = bench_questions['temporal_grounding_question'].format(classification)
-        data['bench_questions'] = bench_questions
+
+        if 'event_description_with_classification' in bench_questions:
+            classification = self.get_category(data['video_name'])
+            bench_questions['event_description_with_classification'] = bench_questions['event_description_with_classification'].format(classification)        
+            
+        if 'multiple_choice_question' in bench_questions and 'multiple_choice_questions' in data:
+            multiple_choice_questions = self.form_multiple_choice_questions(data['multiple_choice_questions'])
+            for i in range(0,len(multiple_choice_questions)):
+                bench_questions[f'multiple_choice_question_{i+1}'] = bench_questions['multiple_choice_question'].format(multiple_choice_questions[i])
+            bench_questions.pop('multiple_choice_question')
+        data['bench_questions'] = bench_questions    
         return data
 
     def get_video_path(self, video_name):
         # 简化的分类获取逻辑，遇到第一个数字就截取
         category = self.get_category(video_name)
+        
         video_path = os.path.join(self.video_folder, category, video_name)
+        if '.' not in video_path:
+            video_path += '.mp4'
         return video_path
     
     def get_category(self, video_name):
@@ -92,9 +106,17 @@ class UCVLDataset(torch.utils.data.Dataset):
                 return video_name[:i]
         return video_name  # 如果没有数字，返回完整名称
     
-    def get_questions(self):
-        return
-
+    def form_multiple_choice_questions(self,data):
+        questions_text = []
+        for key, value in data.items():
+            question = value["question"]
+            options = value["options"]
+            text = f"Question {key}: {question}\n"
+            text += "Options:\n"
+            for option, description in options.items():
+                text += f"  {option}: {description}\n"
+            questions_text.append(text.strip())
+        return questions_text
 
 
 

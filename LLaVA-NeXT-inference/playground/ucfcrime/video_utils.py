@@ -261,29 +261,50 @@ def load_video_internvideo(video_path, num_segments=8, return_msg=False, resolut
     else:
         return frames
     
-def load_last_json_index(output_file):
-    """从输出文件中加载最后一行的 index 值"""
+import json
+
+import json
+
+def load_last_json_index(output_file, collect_scores=False):
+    """从输出文件中搜集所有 scores，并记录最大的 index 值返回（加 1）"""
     try:
         with open(output_file, 'r', encoding='utf-8') as f:
             # 读取文件的所有行
             lines = f.readlines()
             if not lines:  # 检查文件是否为空
                 print(f"Output file is empty: {output_file}")
-                return -1
+                return (0, []) if collect_scores else 0  # 文件为空，返回 0 或 0 和空列表
             
-            # 解析最后一行的 JSON 数据
-            last_entry = json.loads(lines[-1])  # 直接读取最后一行
-            return last_entry.get("index", -1)  # 获取 index，如果不存在则返回 -1
+            max_index = -1
+            scores_list = []  # 用于存储 scores 的列表
+            
+            # 遍历每一行，查找最大 index 并收集 scores
+            for line in lines:
+                try:
+                    data = json.loads(line)
+                    current_index = data.get('index', -1)
+                    
+                    # 记录最大 index
+                    if current_index > max_index:
+                        max_index = current_index
+                    
+                    # 如果启用 collect_scores，尝试收集 scores 属性
+                    if collect_scores and 'scores' in data:
+                        scores_list.append(data['scores'])
+                        
+                except json.JSONDecodeError:
+                    print(f"Error decoding JSON in line: {line}")
+                    continue  # 如果某一行不是合法的 JSON，跳过
+            
+            # 返回根据 collect_scores 条件的不同值
+            if collect_scores:
+                return max_index + 1, scores_list
+            else:
+                return max_index + 1
+        
     except FileNotFoundError:
         print(f"Output file not found: {output_file}")
-        return -1  # 如果文件不存在，返回 -1
-    except json.JSONDecodeError:
-        print(f"Error decoding JSON from file: {output_file}")
-        return -1  # 如果读取文件时出错，返回 -1
-    
-
-
-
+        return (0, []) if collect_scores else 0  # 如果文件不存在，返回 0 或 0 和空列表
 IMAGE_FACTOR = 28
 MIN_PIXELS = 4 * 28 * 28
 MAX_PIXELS = 16384 * 28 * 28

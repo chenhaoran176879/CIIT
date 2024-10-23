@@ -27,7 +27,9 @@ def convert_response_to_dict(data):
         except json.JSONDecodeError:
             print(f"无法解析response为字典: {response_str}")
             return None
-    return None
+    elif 'description' in data: return data
+
+    else: raise ValueError('Expected response or description')
 
 def process_jsonl(input_filepath, output_filepath):
     """读取JSONL文件，转换response，并将结果存储到新文件中"""
@@ -43,8 +45,8 @@ def process_jsonl(input_filepath, output_filepath):
                 print("response不是有效的字典字符串。")
 
 # 使用你的JSONL文件路径
-input_jsonl_file_path = "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/slurm_log/LLM_summarization_results_val.jsonl"
-output_jsonl_file_path = "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/slurm_log/LLM_summarization_results_val_ordered.jsonl"
+input_jsonl_file_path = "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/LLM_summarization_results_all_with_normal.jsonl"
+output_jsonl_file_path = "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/LLM_summarization_results_all_with_normal_1016.jsonl"
 
 # 处理并存储结果
 process_jsonl(input_jsonl_file_path, output_jsonl_file_path)

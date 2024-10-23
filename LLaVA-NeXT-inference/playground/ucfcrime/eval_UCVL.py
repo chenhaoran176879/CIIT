@@ -120,10 +120,10 @@ def get_model(model_path):
 
     elif 'qwen' in model_path.lower() and 'vl' in model_path.lower():
         from transformers import Qwen2VLForConditionalGeneration
+        print("list model path:\n",os.listdir(model_path))
         model = Qwen2VLForConditionalGeneration.from_pretrained(
-            "/home/share/chenhaoran/model_zoo/Qwen2-VL-7B-Instruct", torch_dtype="auto", device_map="auto"
+            model_path, torch_dtype="auto", device_map="auto"
         )
-
         return model,None
 
 
@@ -183,7 +183,7 @@ def model_generate(model_path,model,inputs,tokenizer):
     
 def eval_UCVL(args,dataset,model,tokenizer,image_processor):
     model_name = os.path.basename(args.model_path)
-    start_index = load_last_json_index(args.output_jsonl) + 1
+    start_index = load_last_json_index(args.output_jsonl,collect_scores=False)
     output_f = open(args.output_jsonl, 'a', encoding='utf-8')
     print(f"Starting evaluation for model {model_name} from index: {start_index}")
 
@@ -192,8 +192,10 @@ def eval_UCVL(args,dataset,model,tokenizer,image_processor):
             data = dataset[idx]  # 获取数据
             print(f"Processing index: {idx}, video name: {data['video_name']}")
             answer_cache = {}
+            print("********data**********\n",data)
             for question_name, question_prompt in data['bench_questions'].items():
                 print(f"  Question: {question_name}")
+                print(question_prompt)
                 inputs = preprocess(args,
                                     tokenizer=tokenizer,
                                     video_path=data['video_path'],
@@ -228,8 +230,8 @@ def eval_UCVL(args,dataset,model,tokenizer,image_processor):
 
 
 def main():
-    json_root = "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/slurm_log/LLM_summarization_results_combined.jsonl"
-    video_folder = "/mnt/lustre/chenhaoran/datasets/UCF-Crime-Train/"
+    
+    #video_folder = "/mnt/lustre/chenhaoran/datasets/UCF-Crime-Train/"
     parser = argparse.ArgumentParser(description="UCVLDataset Setup")
 
     # 添加参数
@@ -261,24 +263,27 @@ def main():
                         'event_description_question',
                         'crime_classification_question',
                         'event_description_with_classification',
-                        'temporal_grounding_question'],
+                        'temporal_grounding_question',
+                        'multiple_choice_question'],
                         choices=[
                         'anomaly_detection_question',
                         'event_description_question',
                         'crime_classification_question',
                         'event_description_with_classification',
-                        'temporal_grounding_question'],
+                        'temporal_grounding_question',
+                        'multiple_choice_question'],
                         help="Select questions to answer (choose multiple) from \
                         'anomaly_detection_question', \
                         'event_description_question', \
                         'crime_classification_question', \
                         'event_description_with_classification', \
-                        'temporal_grounding_question'")
+                        'temporal_grounding_question', \
+                        'multiple_choice_question'")
     
     # 解析参数
     args = parser.parse_args()
     print(f"Selected questions: {', '.join(args.questions)}")
-    dataset = UCVLDataset(json_root=args.jsonl_root,video_folder=video_folder,questions=args.questions,split=args.data_split)
+    dataset = UCVLDataset(json_root=args.jsonl_root,video_folder=args.video_folder,questions=args.questions,split=args.data_split)
     model,image_processor = get_model(model_path=args.model_path)
     model.eval()
     tokenizer = None
@@ -294,10 +299,10 @@ if __name__ == "__main__":
     main()
 '''
 python -u /mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_UCVL.py \
-       --jsonl_root  /mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/slurm_log/LLM_summarization_results_combined.jsonl \
+       --jsonl_root /mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/LLM_summarization_results_all_with_normal.jsonl \
        --video_folder /mnt/lustre/chenhaoran/datasets/UCF-Crime-Train/ \
        --nframes 32 \ 
        --model_path /home/share/chenhaoran/model_zoo/OpenGVLab--InternVL2-8B \
        --data_split test \
-       --output_jsonl /mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/slurm_log/eval_results_internvl2-8B.jsonl
+       --output_jsonl /mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_internvl2-8B.jsonl
 '''
