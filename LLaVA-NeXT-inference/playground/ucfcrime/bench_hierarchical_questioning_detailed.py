@@ -90,6 +90,100 @@ Description 2 (AI): {}
 Your score: """
 
 
+
+eval_event_description_prompt_uca="""
+Compare a ground truth description of a video and a video summarization answer from AI models, and give a score for models' answer. 
+Both are description texts of the same video.
+The score for each answer ranges from 0 to 100, based on how well the AI's description matches the ground truth.
+Use the following 2 criteria and add up to a final score:
+1. This task is focused on detecting possible dangerous events in the video.
+First, analyze the ground truth to determine whether there is any dangerous event, possible violence, or crime in the video.
+Then, analyze the AI's description based on the same criteria.
+    --30 points: If the AI agrees with the ground truth regarding the presence or absence of danger, add 30 points.Otherwise, add 0 points.
+
+
+2.  Does the AI-generated description correctly provide the key details of the events, including environment, human appearance, actions, and objects?
+    Maximum Score: 70 points
+    --30 points: Based on how many objects, environment, human or movements that are mentioned in the ground truth are captured by AI.
+    --20 points: Based on AI's additional reasonable details not present in the ground truth but logically consistent with the video content.
+    --20 points: Based on how AI describe the story. Closer to ground truth, higher the points.
+
+Add these parts of points to your final score.
+
+Example 1:
+Description 1 (ground truth): 
+A man wearing a helmet smashed down the glass door outside a small store
+The man broke in.
+There are three to four people, holding multiple shopping bags full of things in their hands,
+Several people passed through the room and finally ran out of the shop.
+
+Description 2 (AI):The video shows a normal event. The scene depicts a woman walking down a set of stairs and entering a store. She then walks around the store and exits through the same door.
+Your score: 20
+
+
+Example 2:
+Description 1 (ground truth):
+A man passed by the glass counter, and two other men passed by behind the glass counter.
+Two men threatened each other with guns, while the other man pointed his finger.
+Two men kept threatening each other with guns, while the other man was leaning against the door to observe the situation.
+The man retreated to the door with a gun in hand and ran forward fiercely.
+The man in the house leaned forward to check the situation, and then ran back quickly.
+he man with the gun quickly ran back into the house.
+A man appeared and quickly retreated.
+A man went out and bent down to pick up something and then entered the house.
+
+Description 2 (AI):The video depicts a severe physical altercation and robbery in a convenience store. A man in a black jacket and white cap enters the store and confronts the store clerk. The man in the black jacket points a gun at the clerk, demanding money. The clerk, visibly frightened, complies with the demand. The assailant then proceeds to hit the clerk with the gun, causing the clerk to fall to the ground. The assailant continues to hit the clerk multiple times, displaying a high level of aggression and violence.\n\nThroughout the video, the assailant maintains control over the situation, using the gun to intimidate and physically assault the clerk. The store's shelves and products are visible in the background, indicating the setting is a small convenience store. 
+﻿
+Your score: 60
+
+Example 3:
+Description 1 (ground truth): 
+A naked man walked into the store, walked to the counter, held the counter with both hands and looked around
+The shirtless man glanced inside the counter and suddenly threw an item on the counter to the ground.
+Then the shirtless man pushed all the shelves to the ground while walking towards the store.
+A man in white walked toward the door while looking in the direction of the shirtless man.
+A person came from inside the counter
+The man in white left from the door,
+A man in black and a man in a striped shirt wearing a hat left the door.
+The shirtless man continued to push the shelves and then left from the door.
+
+Description 2 (AI):The video depicts a robbery in a convenience store. A man enters the store and approaches the counter. He then proceeds to smash the cash register with a hammer, causing it to fall onto the floor. The man then runs out of the store, leaving behind a trail of destruction. The video captures the chaotic scene as the man's actions cause damage to the store's interior.
+Your score: 80
+
+Example 4:
+Description 1 (ground truth):
+A red car hit a motorcycle, the motorcycle driver got up and yelled
+The black car owner opened the door and stood aside talking to the motorcycle owner
+The motorcycle owner walked aside and looked down
+The motorcycle owner walked up to the owner of the black car and spoke
+
+Description 2 (AI):Abnormal event detected.\n\nThe video captures a scene on a city street where a motorcyclist is involved in a collision with a red car. The motorcyclist is thrown off the bike and lands on the ground, appearing to be injured. The red car comes to a stop near the injured motorcyclist. Several pedestrians, including a man in a pink jacket and a woman in a pink coat, are seen walking by the scene. A cyclist also passes by the accident site. The environment is urban with buildings and parked cars in the background. The incident appears to have occurred in the middle of the street, causing a disruption in the flow of traffic.
+Your score: 100
+
+
+
+Question:
+Description 1 (ground truth):
+{}
+Description 2 (AI): {}
+
+Your score: """
+
+
+
+eval_event_description_prompt_uca_neg="""
+Compare a ground truth description of a video and a video summarization answer from AI models, and give a score for models' answer. 
+Both are description texts of the same video.
+The score for each answer ranges from 0 to 100, based on how well the AI's description matches the ground truth.
+
+Question:
+Description 1 (ground truth):
+{}
+Description 2 (AI): {}
+
+Your score: """
+
+
 # and reasons in form of {{"score":99, "reasons":[reason1,reason2,...]}}. The reasons must be in Chinese and is preferred te contain details.
 
 
@@ -154,7 +248,8 @@ Description 2 (AI): {}
 
 Your score: """
 
-
+# Example1: Burglary070
+# Example2: Robbery099_x264
 
 temporal_grounding_question="""
 We believe that a dangerous event occurred in this video. And it is recognized by human to as {}.
@@ -176,17 +271,18 @@ Below is the question.
 {}
 Your answer:"""
 
-# multiple_choice_question="""
-# Please watch this video carefully and answer the following 5 multiple choice questions.
-# Each question is composed of a stem and 4 options. Only 1 option is true.
-# Choose the best option based on the story and details in this video. 
-# After the 5 questions, you should give your answer in a form of ['A','C','D','B','C']. 
-# These five letters denote your choice for the 5 quetsions in the corresponding sequence.
-# Do not involve other sentence or words. Just answer with this list form.
+temporal_grounding_question="""
+We believe that a dangerous event occurred in this video. And it is recognized by human to as {}.
+Please find out when this event starts and ends. Provide the start and end times in seconds in your answer in a format of {{"start_time":4, "end_time":15}}.
+Do not give other response or format.
 
+Your answer:
+"""
 
-# Below are the 5 multiple choice questions:
-# {}
+frame_grounding_question="""
+We believe that a dangerous event occurred in this video. And it is recognized by human to as {}.
+Please find out when this event starts and ends. Provide the start and end times in seconds in your answer in a format of {{"start_time":4, "end_time":15}}.
+Do not give other response or format.
 
-# Your answer:
-# """
+Your answer:
+"""

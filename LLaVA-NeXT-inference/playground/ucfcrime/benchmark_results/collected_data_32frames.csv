@@ -1,0 +1,8 @@
+model_name,average_sum,nframe,anomaly_detection_question,event_description_with_classification,crime_classification_question,multiple_choice_total,openai_model,event_description_question,sum
+InternVL2-1B,408.7,32,56.7,16.4,30.0,230.3,gpt-3.5-turbo,14.3,60.9
+qwen-VL2-2B,609.5,32,83.7,33.4,46.7,323.3,gpt-3.5-turbo,28.7,93.8
+qwen-VL2-7B,648.2,32,81.0,47.4,50.0,329.7,gpt-3.5-turbo,38.9,101.3
+llava-ov-qwen7B,645.0,32,79.7,35.3,51.7,349.0,gpt-3.5-turbo,32.0,97.3
+InternVL2-8B,632.1,32,79.7,53.8,45.3,308.7,gpt-3.5-turbo,43.6,101.0
+InternVL2-26B,703.8,32,86.3,62.5,55.0,332.0,gpt-3.5-turbo,54.2,113.8
+InternVL2-40B,736.6,32,89.3,72.0,56.7,358.3,gpt-3.5-turbo,42.9,117.4

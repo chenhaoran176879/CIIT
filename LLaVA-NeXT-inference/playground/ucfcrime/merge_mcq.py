@@ -1,31 +1,33 @@
 import json
 
-def merge_jsonl_files(file_path1, file_path2, output_file_path):
-    # 读取第一个JSONL文件并建立一个以index为键的字典
-    data1 = {}
-    with open(file_path1, 'r') as file:
+# File paths
+test_file_path = '/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/UCVL_gt_with_test_mcq.jsonl'
+train_file_path = '/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/UCVL_gt_with_train_mcq.jsonl'
+val_file_path = '/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/UCVL_gt_with_val_mcq.jsonl'
+
+# Load JSONL data into dictionaries
+def load_jsonl(file_path):
+    data = {}
+    with open(file_path, 'r') as file:
         for line in file:
-            data = json.loads(line)
-            index = int(data['index']) # 假设每个JSON对象只有一个键值对，键为index
-            data1[index] = data
+            item = json.loads(line)
+            data[item['index']] = item
+    return data
 
-    # 读取第二个JSONL文件并合并数据
-    with open(file_path2, 'r') as file:
-        for line in file:
-            data = json.loads(line)
-            index = int(data['index'])  # 假设每个JSON对象只有一个键值对，键为index
-            if index in data1:
-                # 如果index匹配，合并字典
-                data1[index].update(data)
-            else:
-                print("Error: Index do not match.")
+# Load all data
+test_data = load_jsonl(test_file_path)
+train_data = load_jsonl(train_file_path)
+val_data = load_jsonl(val_file_path)
 
-    # 将合并后的数据写入到新的JSONL文件中
-    with open(output_file_path, 'w') as file:
-        for index, value in data1.items():
-            file.write(json.dumps( value)+'\n')
+# Update test data with train and val data
+for index, item in {**train_data, **val_data}.items():
+    if index in test_data:
+        test_data[index].update(item)
 
-# 使用示例
-merge_jsonl_files('/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/UCVL_video_caption_ground_truth.jsonl',
- '/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/UCVL_MCQ_ground_truth_test.jsonl', 
- '/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/UCVL_gt_with_test_mcq.jsonl')
+# Write the updated test data back to a new file
+output_file_path = '/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/UCVL_gt_with_mcq.jsonl'
+with open(output_file_path, 'w') as file:
+    for item in test_data.values():
+        file.write(json.dumps(item) + '\n')
+
+print("Test data has been updated successfully!")

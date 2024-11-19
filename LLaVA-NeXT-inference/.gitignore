@@ -9,6 +9,7 @@ logs
 test_scripts
 *.log
 *.log.*
+*.txt
 # *.json
 # *.jsonl
 

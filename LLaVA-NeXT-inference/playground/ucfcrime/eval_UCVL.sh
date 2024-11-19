@@ -5,7 +5,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=8
 #SBATCH -p ai_training
-#SBATCH --exclude=dx-ai-node2
+#SBATCH --nodelist=dx-ai-node5
 #SBATCH -o /mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/slurm_log/%x_%j_output.txt
 #SBATCH -e /mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/slurm_log/%x_%j_error.txt
 
@@ -13,7 +13,7 @@ echo slurm_job_node_list: $SLURM_JOB_NODELIST
 echo slurm_ntasks_per_node: $SLURM_NTASKS_PER_NODE
 
 # 手动填写 model_path
-NFRAMES=32
+NFRAMES=64
 MODEL_PATH="/home/share/chenhaoran/model_zoo/OpenGVLab--InternVL2-40B"
 # current video models' collection
 # "/home/share/chenhaoran/model_zoo/OpenGVLab--InternVL2-1B",# work on A800 only
@@ -34,7 +34,7 @@ MODEL_PATH="/home/share/chenhaoran/model_zoo/OpenGVLab--InternVL2-40B"
 MODEL_NAME=$(basename "$MODEL_PATH")
 
 # 生成 output_jsonl 的名称
-OUTPUT_JSONL="/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_${MODEL_NAME}_${NFRAMES}frames_Description_with_class_only_1023.jsonl"
+OUTPUT_JSONL="/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_${MODEL_NAME}_${NFRAMES}frames_all_1023.jsonl"
 
 
 conda activate llava-interleave
@@ -44,7 +44,7 @@ python -u /mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/e
        --nframes $NFRAMES \
        --model_path "$MODEL_PATH" \
        --data_split test \
-       --questions event_description_with_classification \
+       --questions anomaly_detection_question event_description_question crime_classification_question event_description_with_classification multiple_choice_question \
        --output_jsonl "$OUTPUT_JSONL"
 
 # eval all questions:

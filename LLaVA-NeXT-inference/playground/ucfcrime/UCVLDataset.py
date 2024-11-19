@@ -5,6 +5,7 @@ import os
 import copy
 
 from bench_hierarchical_questioning_detailed import anomaly_detection_question,event_description_question,crime_classification_question,temporal_grounding_question,event_description_with_classification,multiple_choice_question
+from bench_hierarchical_questioning_detailed import frame_grounding_question
 class UCVLDataset(torch.utils.data.Dataset):
     # UCVL: UCF-Crime for Video Language models
     def __init__(self, json_root, video_folder,questions,split='train'):
@@ -20,7 +21,8 @@ class UCVLDataset(torch.utils.data.Dataset):
             'crime_classification_question': crime_classification_question,
             'event_description_with_classification':event_description_with_classification,
             'temporal_grounding_question': temporal_grounding_question,
-            'multiple_choice_question':multiple_choice_question
+            'multiple_choice_question':multiple_choice_question,
+            'frame_grounding_question':frame_grounding_question
         }
         
         # 根据用户选择的 questions 构建 bench_questions
@@ -87,6 +89,15 @@ class UCVLDataset(torch.utils.data.Dataset):
             for i in range(0,len(multiple_choice_questions)):
                 bench_questions[f'multiple_choice_question_{i+1}'] = bench_questions['multiple_choice_question'].format(multiple_choice_questions[i])
             bench_questions.pop('multiple_choice_question')
+        
+        if 'frame_grounding_question' in bench_questions:
+            start_frame = data['start_frame']
+            end_frame = data['end_frame']
+            duration = data['duration']
+            fps = data['fps']
+            
+            pass
+
         data['bench_questions'] = bench_questions    
         return data
 

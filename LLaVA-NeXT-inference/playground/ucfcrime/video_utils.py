@@ -14,7 +14,6 @@ import torch.nn.functional as F
 import numpy as np
 from PIL import Image
 import json
-
 # internvl's load video
 IMAGENET_MEAN = (0.485, 0.456, 0.406)
 IMAGENET_STD = (0.229, 0.224, 0.225)
@@ -260,10 +259,7 @@ def load_video_internvideo(video_path, num_segments=8, return_msg=False, resolut
         return frames, msg
     else:
         return frames
-    
-import json
 
-import json
 
 def load_last_json_index(output_file, collect_scores=False):
     """从输出文件中搜集所有 scores，并记录最大的 index 值返回（加 1）"""
@@ -518,3 +514,48 @@ def qwen_process_vision_info(
     if len(video_inputs) == 0:
         video_inputs = None
     return image_inputs, video_inputs
+
+
+import cv2
+def trim_and_save_video(video_path, output_video_path, start_frame=0, end_frame=None):
+    # Initialize the VideoReader object
+    vr = VideoReader(video_path, ctx=cpu(0))
+
+    # Ensure start and end frames are within valid range
+    start_frame = max(0, start_frame)
+    end_frame = min(len(vr), end_frame) if end_frame else len(vr)
+
+    # Get video properties for saving
+    height, width, _ = vr[0].shape
+    fps = vr.get_avg_fps()
+
+    # Initialize the VideoWriter object
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Codec for .mp4 format
+    out = cv2.VideoWriter(output_video_path, fourcc, fps, (width, height))
+
+    # Write frames to the output video
+    for frame_index in range(start_frame, end_frame):
+        frame = vr[frame_index].asnumpy()
+        # Convert the frame from RGB to BGR, as OpenCV uses BGR format
+        frame_bgr = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+        out.write(frame_bgr)
+
+    # Release the VideoWriter
+    out.release()
+
+def get_video_info(file_path):
+    cap = cv2.VideoCapture(file_path)
+    if not cap.isOpened():
+        raise ValueError(f"Cannot open video file: {file_path}")
+    
+    # 获取帧率（FPS）
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    
+    # 获取总帧数
+    total_frames = cap.get(cv2.CAP_PROP_FRAME_COUNT)
+    
+    # 计算时长（秒）
+    duration = total_frames / fps if fps > 0 else 0
+
+    cap.release()
+    return {"fps": fps, "duration": duration}

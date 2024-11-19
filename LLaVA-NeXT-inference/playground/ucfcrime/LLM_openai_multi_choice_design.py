@@ -97,13 +97,14 @@ Now please make up 5 questions, each with 4 options and 1 ground truth:
 def main():
     # Initialize the dataset
     dataset = UCVLDataset(
-        json_root="/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/UCVL_video_caption_ground_truth.jsonl",
+        json_root="/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/UCVL_gt_with_test_mcq.jsonl",
         video_folder="/mnt/lustre/chenhaoran/datasets/UCF-Crime-Train/",
-        split='test',
+        split='val',
         questions=None
     )
 
-    MCQ_save_path = '/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/UCVL_MCQ_ground_truth_test.jsonl'
+    print(len(dataset))
+    MCQ_save_path = '/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/UCVL_gt_with_val_mcq.jsonl'
     client = OpenAIChatBot()
 
     # Load existing indices to skip
@@ -118,7 +119,9 @@ def main():
     with open(MCQ_save_path, 'a', encoding='utf-8') as f:
         for index in range(0, len(dataset)):
             # Skip existing indices
-            if (index+1536) in existing_indices:
+            data_split_index = index+1158 # if test: index+1536 if val: index+1158
+            if data_split_index in existing_indices:
+                print('skipping ', data_split_index)
                 continue
             
             data = dataset[index]
@@ -130,13 +133,13 @@ def main():
 
             # Check for empty values in MCQ_dict
             if any(not value for value in MCQ_dict.values() if isinstance(value, (dict, str))):
-                raise ValueError(f"MCQ_dict contains empty values for index {index}: {MCQ_dict}")
+                raise ValueError(f"MCQ_dict contains empty values for index {data_split_index}: {MCQ_dict}")
 
             # Clean up the data and add MCQ_dict
             data.pop('video_path', None)
             data.pop('bench_questions', None)
             data['multiple_choice_questions'] = MCQ_dict
-            data['index'] = index+1536  # Ensure to add the index to data for reference
+            data['index'] = data_split_index  # Ensure to add the index to data for reference
 
             f.write(json.dumps(data) + '\n')
             print(json.dumps(data))
@@ -145,58 +148,3 @@ def main():
 if __name__ == "__main__":
     main()
   
-
-# text = '''[MCQ_1] What were the colors of the helmets worn by the two masked individuals involved in the theft? 
-# [A] Black and yellow
-# [B] Red and white
-# [C] Black and red
-# [D] Blue and green
-# [ground_truth]C
-
-# [MCQ_2] What did the man in the black helmet steal during the theft?
-# [A] Items from a red motorcycle
-# [B] Items from a green motorcycle
-# [C] Items from a blue motorcycle
-# [D] Items from a yellow motorcycle
-# [ground_truth]C
-
-# [MCQ_3] How did the man in the red helmet attempt to break into the motorcycle?
-# [A] He used a key to unlock it
-# [B] He kicked the motorcycle
-# [C] He tried to forcefully open the lock
-# [D] He asked the owner for the keys
-# [ground_truth]C
-
-# [MCQ_4] What action did the blue-helmeted individual take during the theft?
-# [A] He assisted the black-helmeted thief
-# [B] He reported the theft to the authorities
-# [C] He warned the motorcycle owners
-# [D] He left the scene immediately
-# [ground_truth]A
-
-# [MCQ_5] What was the ultimate outcome of the theft incident?
-# [A] Both masked individuals successfully escaped
-# [B] The police arrived and apprehended the thieves
-# [C] The stolen items were returned to the owners
-# [D] One thief rode away on the illuminated blue motorcycle followed by another individual on a separate motorcycle
-# [ground_truth]D
-# '''
-
-# pattern = re.compile(r'\[MCQ_(\d+)\]\s*(.*?)\s*\[A\]\s*(.*?)\s*\[B\]\s*(.*?)\s*\[C\]\s*(.*?)\s*\[D\]\s*(.*?)\s*\[ground_truth\](\w)')
-# matches = pattern.findall(text)
-
-# for match in matches:
-#     question_number = match[0]
-#     question = match[1]
-#     option_a = match[2]
-#     option_b = match[3]
-#     option_c = match[4]
-#     option_d = match[5]
-#     ground_truth = match[6]
-#     print(f"Question {question_number}: {question}")
-#     print(f"A: {option_a}")
-#     print(f"B: {option_b}")
-#     print(f"C: {option_c}")
-#     print(f"D: {option_d}")
-#     print(f"Ground truth: {ground_truth}")
-#     print("-" * 40)

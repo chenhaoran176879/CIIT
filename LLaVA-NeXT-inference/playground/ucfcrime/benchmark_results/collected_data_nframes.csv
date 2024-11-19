@@ -1,0 +1,8 @@
+,model_name,score_8frames,score_16frames,score_32frames,score_64frames
+0,InternVL2-1B,58.6,61.0,60.9,59.7
+1,qwen-VL2-2B,78.8,93.5,93.8,94.8
+2,qwen-VL2-7B,73.1,102.7,101.3,104.9
+3,llava-ov-qwen7B,90.8,98.3,97.3,95.9
+4,InternVL2-8B,96.9,99.7,101.0,99.2
+5,InternVL2-26B,108.7,110.6,113.8,112.8
+6,InternVL2-40B,115.0,117.4,117.4,118.7

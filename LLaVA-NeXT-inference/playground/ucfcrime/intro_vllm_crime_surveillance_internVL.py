@@ -1,14 +1,8 @@
-def chat(input_text):
-    inputs = tokenizer(input_text, return_tensors="pt").to(model.device)
-    with torch.no_grad():
-        outputs = model.chat(inputs.input_ids, max_length=200, do_sample=True)
-    response = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    return response
 
 
 import torch
 from transformers import AutoTokenizer, AutoModel
-path = "/home/share/chenhaoran/model_zoo/models--OpenGVLab--InternVL2-40B/snapshots/b52a031c8dc5c9fc2da55daae3cf1d7062371d13/"
+path = "/home/share/chenhaoran/model_zoo/OpenGVLab--InternVL2-40B"
 tokenizer = AutoTokenizer.from_pretrained(path, trust_remote_code=True, use_fast=False)
 model = AutoModel.from_pretrained(
     path,
@@ -24,7 +18,8 @@ from PIL import Image
 from torchvision.transforms.functional import InterpolationMode
 import numpy as np
 import torchvision.transforms as T
-
+import os
+import json
 
 IMAGENET_MEAN = (0.485, 0.456, 0.406)
 IMAGENET_STD = (0.229, 0.224, 0.225)
@@ -132,24 +127,105 @@ def load_video(video_path, bound=None, input_size=448, max_num=1, num_segments=3
     pixel_values = torch.cat(pixel_values_list)
     return pixel_values, num_patches_list
 
-video_path = '/home/share/dataset/OpenDataLab___UCF-Crime/raw/UCF-Crime/Anomaly-Detection-Dataset/Anomaly-Videos-Part-1/Abuse/Abuse001_x264.mp4'
-pixel_values, num_patches_list = load_video(video_path, num_segments=32, max_num=1)
-pixel_values = pixel_values.to(torch.bfloat16).cuda()
-video_prefix = ''.join([f'Frame{i+1}: <image>\n' for i in range(len(num_patches_list))])
-question = video_prefix + 'We detected a crime act between people or people and animals in this video. Try to find it and describe the action.'
-# Frame1: <image>\nFrame2: <image>\n...\nFrame8: <image>\n{question}
-response, history = model.chat(tokenizer, pixel_values, question, generation_config,
-                               num_patches_list=num_patches_list, history=None, return_history=True)
-print(f'User: {question}\nAssistant: {response}')
 
-question = 'Describe what the men are doing to the lady in detail. Try to determine whether this is an act of crime.'
-response, history = model.chat(tokenizer, pixel_values, question, generation_config,
-                               num_patches_list=num_patches_list, history=history, return_history=True)
-print(f'User: {question}\nAssistant: {response}')
+def chat(input_text):
+    inputs = tokenizer(input_text, return_tensors="pt").to(model.device)
+    with torch.no_grad():
+        outputs = model.chat(inputs.input_ids, max_length=200, do_sample=True)
+    response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    return response
 
 
-# #
-# We detected a crime act of abuse between people or people and animals in this video. Try to find it and describe the action.
-# Assistant: In the video, a person is seen kneeling down and hitting another person who is standing. This act of physical violence is a clear indication of abuse. The person who is standing appears to be in distress and is trying to defend themselves from the attacker. The attacker continues to hit the person, causing them to fall to the ground. The act of abuse is captured in multiple frames, showing the attacker's aggressive behavior towards the victim. This kind of behavior is unacceptable and should be reported to the authorities immediately.
-# User: Describe what the men are doing to the lady in detail. Try to determine whether this is an act of abuse.
-# Assistant: In the video, a man is seen kneeling down and hitting a lady who is standing. The man continues to hit the lady, causing her to fall to the ground. The act of hitting someone who is standing and causing them to fall to the ground is a clear indication of abuse. The man's aggressive behavior towards the lady is captured in multiple frames, showing his violent actions towards her. The lady appears to be in distress and is trying to defend herself from the attacker. This kind of behavior is unacceptable and should be reported to the authorities immediately.
+
+
+
+
+
+def ask_questions(questions, video_path, nframes=32, max_tokens=128,model_name=path.split('/')[-1]):
+    responses = []
+    video_dir, video_filename = os.path.split(video_path)
+    video_name = os.path.splitext(video_filename)[0]
+    output_dir = "/mnt/lustre/chenhaoran/datasets/UCF-Crime-Train/crime_videos_cut/"
+    output_file = os.path.join(output_dir, f"{model_name}_{video_name}_{nframes}frames.json")
+    # Check if the output file exists; if not, create an empty JSON array in it
+    if not os.path.exists(output_file):
+        with open(output_file, 'w') as f:
+            json.dump([], f)
+    
+    # Load existing history if any
+    with open(output_file, 'r') as f:
+        dialogue_history = json.load(f)
+    
+    pixel_values, num_patches_list = load_video(video_path, num_segments=nframes, max_num=1)
+    pixel_values = pixel_values.to(torch.bfloat16).cuda()
+
+    video_prefix = ''.join([f'Frame{i+1}: <image>\n' for i in range(len(num_patches_list))])
+
+    history = None
+    # Iterate through questions, ask the model, and store responses
+    print(f"Processing {video_name}")
+    for question in questions:
+        if history ==None:
+            question = video_prefix+question
+
+        response, history = model.chat(tokenizer, pixel_values, question, generation_config,
+                                    num_patches_list=num_patches_list, history=history, return_history=True)
+        print(f'User: {question}\nAssistant: {response}')
+        
+        # Append response to list
+        responses.append(response)
+        
+        # Save each Q&A pair to the dialogue history
+        dialogue_entry = {
+            "question": question,
+            "response": response
+        }
+        dialogue_history.append(dialogue_entry)
+        
+        # Write updated history back to the file
+    with open(output_file, 'w') as f:
+        json.dump(dialogue_history, f, ensure_ascii=False, indent=4)
+    
+    messages = []
+    
+    return responses
+
+# Example usage
+
+
+def generate_video_paths(videos, base_dir="/mnt/lustre/chenhaoran/datasets/UCF-Crime-Train"):
+    video_paths_dict = {}
+    
+    for video in videos:
+        # Extract category from video name
+        category = video.split('0')[0]  # Extract category like 'Assault' from 'Assault011'
+        
+        # Original video path
+        video_path = os.path.join(base_dir, category, f"{video}_x264.mp4")
+        
+        # Generate trimmed video path
+        trimmed_video_path = os.path.join(base_dir, "crime_videos_cut", f"trimmed_{video}_x264.mp4")
+        
+        # Store both paths in the dictionary with video name as the key
+        video_paths_dict[video] = {
+            'original': video_path,
+            'trimmed': trimmed_video_path
+        }
+    
+    return video_paths_dict
+
+videos_to_test = ['Fighting003','Assault011','Arrest001','Explosion021']
+video_paths = generate_video_paths(videos_to_test)
+
+with open("/mnt/lustre/chenhaoran/datasets/UCF-Crime-Train/crime_videos_cut/stepbystep_questions.json",'r') as f:
+    questions = json.load(f)
+
+
+for video in videos_to_test:
+    questions_per_video = questions[video]
+    trimmed = video_paths[video]['trimmed']
+    original = video_paths[video]['original']
+    responses = ask_questions(questions[video], original, nframes=32)
+    torch.cuda.empty_cache()
+    responses = ask_questions(questions[video], trimmed, nframes=32)
+    torch.cuda.empty_cache()

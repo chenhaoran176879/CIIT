@@ -4,7 +4,7 @@ from openai import OpenAI
 import csv
 import os
 import logging
-from bench_hierarchical_questioning_detailed import  eval_event_description_prompt,eval_event_description_with_classification_prompt
+from bench_hierarchical_questioning_detailed import  eval_event_description_prompt,eval_event_description_with_classification_prompt,eval_event_description_prompt_uca
 import json
 from copy import deepcopy
 import argparse
@@ -12,6 +12,8 @@ from video_utils import load_last_json_index
 
 
 def convert_response_to_numeric(value):
+    if not isinstance(value,str):
+        value = str(value)
     try:
         # 如果包含小数点或是科学计数法的符号，转换为浮点数
         if '.' in value or 'e' in value.lower():
@@ -55,6 +57,11 @@ class UCVLAnswerDataset:
         self.eval_prompts = {
             "event_description_question":eval_event_description_prompt,
             "event_description_with_classification":eval_event_description_with_classification_prompt
+        }
+
+        self.eval_prompts_uca = {
+            "event_description_question":eval_event_description_prompt_uca,
+            #"event_description_with_classification":eval_event_description_with_classification_prompt
         }
         self.data = self.load_data(answer_path)
         self.ground_truth = self.load_ground_truth(ground_truth_path)
@@ -182,12 +189,19 @@ def UCVL_scoring(args):
         detection_score = 100
         result = deepcopy(answer_sheet["model_answer"])
         logger.info(f"视频名称：{answer_sheet['model_answer']['video_name']}")
+
+
         for question_name,model_answer in answer_sheet['model_answer']['answer'].items():
+            
             eval_prompt_format = model_answer_dataset.eval_prompts.get(question_name,None)
             if isinstance(model_answer, list) and len(model_answer) == 1 : model_answer = model_answer[0]
             if eval_prompt_format:
                 eval_prompt = eval_prompt_format.format(ground_truth_description,model_answer)
-                score = client.chat(eval_prompt)
+                try:
+                    score = client.chat(eval_prompt)
+                except Exception as e:
+                    print(f"Error: model_name: {model_name} data index:{idx},Error info:{e}")
+                    score = 0
                 score = convert_response_to_numeric(score)
                 scores[question_name] = score
 
@@ -295,14 +309,13 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     answer_paths = [
-    "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_qwen-vl2-72B_32frames_merge.jsonl",
-    "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_Qwen2-VL-7B-Instruct_32frames_merge.jsonl",
-    "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_qwen-vl2-2B_32frames_merge.jsonl",
-    "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_lmms-lab--llava-onevision-qwen2-7b-ov_32frames_merge.jsonl",
-    "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_OpenGVLab--InternVL2-1B_32frames_merge.jsonl",
-    "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_OpenGVLab--InternVL2-8B_32frames_merge.jsonl",
-    "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_OpenGVLab--InternVL2-26B_32frames_merge.jsonl",
-    "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_OpenGVLab--InternVL2-40B_32frames_merge.jsonl",
+    "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_lmms-lab--llava-onevision-qwen2-7b-ov_64frames_all_1023.jsonl",
+    "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_OpenGVLab--InternVL2-1B_64frames_all_1023.jsonl",
+    "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_OpenGVLab--InternVL2-8B_64frames_all_1023.jsonl",
+    "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_OpenGVLab--InternVL2-26B_64frames_all_1023.jsonl",
+    "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_OpenGVLab--InternVL2-40B_64frames_all_1023.jsonl",
+    "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_qwen-vl2-2B_64frames_all_1023.jsonl",
+    "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/eval_results/eval_results_Qwen2-VL-7B-Instruct_64frames_all_1023.jsonl",
     ]
 
     args.ground_truth_path = "/mnt/lustre/chenhaoran/CIIT/LLaVA-NeXT-inference/playground/ucfcrime/UCVL_gt_with_test_mcq.jsonl"
@@ -315,7 +328,7 @@ if __name__ == "__main__":
         # 只取文件名部分，并替换路径为新的结果目录
         base_filename = os.path.basename(answer_path).split('.')[0]
         log_filename = os.path.join(log_dir, base_filename + '.log')
-        args.save_score_path = os.path.join(save_dir, base_filename + '_score_1018.jsonl')
+        args.save_score_path = os.path.join(save_dir, base_filename + '_score_uca_1118_003.jsonl')
 
         setup_logger(log_filename)
 
